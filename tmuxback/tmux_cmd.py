@@ -9,6 +9,8 @@ import util
 #list sessions
 CMD_LIST_SESSIONS='tmux list-sessions -F#S'
 CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:#{window_name} -t%s'
+#tmux list-panes -t {session}:{windowIdx}
+CMD_LIST_PANES='tmux list-panes -t%s:%s -F#{window_index}:#{window_name}'
 
 
 
@@ -18,14 +20,18 @@ def get_session_names():
     s = util.exec_cmd(cmd)
     return s.split('\n')
 
-def get_windows_from_session(session):
+def get_windows_from_session(sess_name):
     """return a dict {index:win_name} of windows by given session"""
-    cmd = (CMD_LIST_WINDOWS % session).split(' ')
+    cmd = (CMD_LIST_WINDOWS % sess_name).split(' ')
     s = util.exec_cmd(cmd)
     l = s.split('\n')
     return dict(x.split(':') for x in l)
     
-
+def get_panes_from_sess_win(sess_name,win_idx):
+    """return list of result string"""
+    cmd = (CMD_LIST_PANES % sess_name, win_idx).split(' ')
+    s = util.exec_cmd(cmd)
+    return s.split('\n')
 
 
 

@@ -8,10 +8,13 @@ class Tmux(object):
 class Session(object):
     def __init__(self, name):
         self.name = name
+        self.size = []
         self.windows = []
 
 class Window(object):
     def __init__(self, name):
+        #sessionName.windowIdx as id
+        self.id=''
         self.name = name
         self.panels = []
         self.index = 0
@@ -20,5 +23,8 @@ class Window(object):
 class Pane(object):
     """tmux pane object"""
     def __init__(self):
-        #todo
+        #string sessionName.windowIdx.paneIdx as id
+        self.id=''
+        self.index = 0
+        self.size = []
         pass
