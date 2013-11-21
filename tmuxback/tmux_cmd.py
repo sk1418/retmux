@@ -7,7 +7,7 @@ import util
 #tmux commands
 
 #list sessions
-CMD_LIST_SESSIONS='tmux list-sessions -F#S'
+CMD_LIST_SESSIONS='tmux list-sessions -F#S:[#{session_width},#{session_height}]:#{session_attached}'
 CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:#{window_name} -t(sess_name)s'
 #tmux list-panes -t {session}:{windowIdx}
 CMD_LIST_PANES='tmux list-panes -t%s:%s -F#{window_index}:#{window_name}'
@@ -15,7 +15,10 @@ CMD_LIST_PANES='tmux list-panes -t%s:%s -F#{window_index}:#{window_name}'
 CMD_CREATE_SESSION='tmux new-session -d -s%s -n%s -x%d -y%d'
 
 def get_session_names():
-    """ return a list of tmux session names """
+    """ 
+    return a list of tmux session names:size:attached
+    like: sessName:[200x300]:1
+    """
     cmd = CMD_LIST_SESSIONS.split(' ')
     s = util.exec_cmd(cmd)
     return s.split('\n')

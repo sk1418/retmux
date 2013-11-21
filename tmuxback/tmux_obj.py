@@ -6,8 +6,9 @@ class Tmux(object):
         self.sessions = []
 
 class Session(object):
-    def __init__(self, name):
+    def __init__(self,name):
         self.name = name
+        self.attached = False
         self.size = []
         self.windows = []
 
