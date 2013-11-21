@@ -7,17 +7,17 @@ import util
 #tmux commands
 
 #list sessions
-CMD_LIST_SESSIONS='tmux list-sessions -F#S:=:[#{session_width},#{session_height}]:=:#{session_attached}'
+CMD_LIST_SESSIONS='tmux list-sessions -F#S:=:(#{session_width},#{session_height}):=:#{session_attached}'
 CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active} -t%s'
 #tmux list-panes -t {session}:{windowIdx}
-CMD_LIST_PANES='tmux list-panes -t%s:%s -F#{window_index}:=:#{window_name}'
+CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'
 
 CMD_CREATE_SESSION='tmux new-session -d -s%s -n%s -x%d -y%d'
 
 def get_sessions():
     """ 
     return a list of tmux session names:size:attached
-    like: sessName:[200,300]:1
+    like: sessName:=:(200,300):=:1
     """
     cmd = CMD_LIST_SESSIONS.split(' ')
     s = util.exec_cmd(cmd)
@@ -26,15 +26,17 @@ def get_sessions():
 def get_windows_from_session(sess_name):
     """
     return a list of windows by given tmux session name
-    like: 1:W-name:1
-    idx:name:active
+    like: 1:=:W-name:=:1
+    idx:=:name:=:active
     """
     cmd = (CMD_LIST_WINDOWS % sess_name).split(' ')
     s = util.exec_cmd(cmd)
     return s.split('\n')
     
 def get_panes_from_sess_win(sess_name,win_idx):
-    """return list of result string"""
+    """return list of result string
+      output format: paneIdx:=:(width,height):=:path:=:active
+    """
     #dict parameter
     p = (sess_name,win_idx)
     cmd = (CMD_LIST_PANES % p).split(' ')

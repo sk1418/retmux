@@ -39,14 +39,31 @@ def load_windows(s_name):
     for s in output:
         #s is like 1:wname:1
         w_l = s.split(SEP)
-        win = tmux_obj.Window(int(w_l[0]))
+        win = tmux_obj.Window(s_name,int(w_l[0]))
         win.name = w_l[1]
         win.active = int(w_l[2])
+        #load panes
+        win.panes = load_panes(s_name,win.id)
+
         wins.append(win)
     return wins
         
 
-
+def load_panes(s_name,w_id):
+    """
+    load panes for given session name and window idx
+    """
+    output = tmux_cmd.get_panes_from_sess_win(s_name,w_id)
+    panes = []
+    for s in output:
+        #output format: paneIdx:=:width:=:height:=:path:=:active
+        p_l = s.split(SEP)
+        pane = tmux_obj.Pane(s_name,w_id,int(p_l[0]))
+        pane.size = eval(p_l[1])
+        pane.path = p_l[2]
+        pane.active = int(p_l[3])
+        panes.append(pane)
+    return panes
 
 
 if __name__ == '__main__':
