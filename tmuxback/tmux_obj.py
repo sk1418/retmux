@@ -31,4 +31,7 @@ class Pane(object):
         self.active= False
         self.sess_name = sess_name
         self.win_id = win_id
+
+    def panel_idstr(self):
+        return self.sess_name+':'+str(self.win_id)+'.'+str(self.id)
         

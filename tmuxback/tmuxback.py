@@ -22,7 +22,7 @@ def load_sessions():
     sess = []
 
     for s in output:
-        #s is like  sessName:[200,300]:1
+        #s is like  sessName:(200,300):1
         s_l = s.split(SEP)
         session =tmux_obj.Session(s_l[0]) 
         session.size = eval(s_l[1])
