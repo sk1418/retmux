@@ -13,19 +13,16 @@ class Session(object):
         self.windows = []
 
 class Window(object):
-    def __init__(self, name):
+    def __init__(self,id):
         #sessionName.windowIdx as id
-        self.id=''
-        self.name = name
+        self.id=id
+        self.name = 'win' + str(id)
         self.panels = []
-        self.index = 0
-        self.active= 0
+        self.active= False
 
 class Pane(object):
     """tmux pane object"""
     def __init__(self):
         #string sessionName.windowIdx.paneIdx as id
         self.id=''
-        self.index = 0
         self.size = []
-        pass
