@@ -4,6 +4,7 @@ import tmux_cmd
 import tmux_obj
 import config
 import datetime,time
+import os
 from os import path 
 
 
@@ -11,13 +12,21 @@ from os import path
 def current_tmux():
     """get current tmux information and return Tmux object"""
     #id is timestamp
-    id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
-    parent_dir= path.join(config.BACKUP_PATH,id)
-    tmux = tmux_obj.Tmux(id)
+    tmux_id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+    parent_dir    = path.join(config.BACKUP_PATH,tmux_id)
+
+    tmux          = tmux_obj.Tmux(tmux_id)
     tmux.sessions = load_sessions()
-    util.to_json(tmux,parent_dir, id + '.json')
 
+    util.to_json(tmux, parent_dir, tmux_id + '.json')
 
+    #if parent path doesn't exist, create the dir
+    #if tmux and not os.path.exists(parent_dir):
+        #os.makedirs(parent_dir)
+    for s in tmux.sessions:
+        for w in s.windows:
+            for p in w.panes:
+                tmux_cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
 def load_sessions():
     """load sessions information """
     output = tmux_cmd.get_sessions()
@@ -45,7 +54,7 @@ def load_windows(s_name):
         win.name = w_l[1]
         win.active = int(w_l[2])
         #load panes
-        win.panes = load_panes(s_name,win.id)
+        win.panes = load_panes(s_name,win.win_id)
 
         wins.append(win)
     return wins
@@ -64,7 +73,6 @@ def load_panes(s_name,w_id):
         pane.size = eval(p_l[1])
         pane.path = p_l[2]
         pane.active = int(p_l[3])
-        #capture pane content
         panes.append(pane)
     return panes
 

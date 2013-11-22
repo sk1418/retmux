@@ -12,6 +12,12 @@ def exec_cmd(cmd):
         s = re.sub('\n$','',s)
     return s
 
+def exec_cmd_redir(cmd, file_fullname):
+    """execute a shell command
+    redirect the output to the file"""
+    with open(file_fullname, 'w') as fout:
+        subprocess.call(cmd, stdout=fout)
+
 def to_json(obj, parent_dir, filename):
     #if parent path doesn't exist, create the dir
     if not os.path.exists(parent_dir):
