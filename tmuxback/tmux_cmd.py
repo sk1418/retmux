@@ -14,6 +14,9 @@ CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pan
 
 CMD_CREATE_SESSION='tmux new-session -d -s%s -n%s -x%d -y%d'
 
+#capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
+CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s > %s'
+
 def get_sessions():
     """ 
     return a list of tmux session names:size:attached
@@ -42,6 +45,18 @@ def get_panes_from_sess_win(sess_name,win_idx):
     cmd = (CMD_LIST_PANES % p).split(' ')
     s = util.exec_cmd(cmd)
     return s.split('\n')
+
+def capture_pane(pane_idstr,filename):
+    """
+    capture pane content and save in given filename.
+    the format of pane_idstr is: sessionName:winIdx.paneIdx
+    """
+    p = (pane_idstr, filename)
+    cmd = (CMD_CAPTURE_PANE % p)
+    r = util.exec_cmd(cmd)
+    #return false if there is output
+    return not r
+
 
 def create_session(sess_name,win_name,width,height):
     p = (sess_name,win_name,width,height)

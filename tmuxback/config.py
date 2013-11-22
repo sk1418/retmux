@@ -4,9 +4,11 @@ import shutil, sys
 import ConfigParser
 
 VERSION     = '1.0.0'                #software version
+#the separator of tmux command output
+SEP         = ':=:'
 APP_PATH    = path.join(path.dirname(__file__),"../")
 USER_PATH   = path.join(os.getenv("HOME") , ".tmuxback")
-SAMPLE_CONF    = path.join(APP_PATH, 'sample','default.conf')
+SAMPLE_CONF = path.join(APP_PATH, 'sample','default.conf')
 BACKUP_PATH = path.join(USER_PATH, "backup")
 CONF_FILE   = path.join(USER_PATH, "tmuxback.conf")
 

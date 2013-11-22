@@ -2,18 +2,20 @@
 import util
 import tmux_cmd
 import tmux_obj
+import config
 import datetime,time
+from os import path 
 
-#the separator of tmux command output
-SEP=':=:'
+
 
 def current_tmux():
     """get current tmux information and return Tmux object"""
     #id is timestamp
     id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+    parent_dir= path.join(config.BACKUP_PATH,id)
     tmux = tmux_obj.Tmux(id)
     tmux.sessions = load_sessions()
-    util.to_json(tmux)
+    util.to_json(tmux,parent_dir, id + '.json')
 
 
 def load_sessions():
@@ -23,7 +25,7 @@ def load_sessions():
 
     for s in output:
         #s is like  sessName:(200,300):1
-        s_l = s.split(SEP)
+        s_l = s.split(config.SEP)
         session =tmux_obj.Session(s_l[0]) 
         session.size = eval(s_l[1])
         session.attached = int(s_l[2])>0
@@ -38,7 +40,7 @@ def load_windows(s_name):
     wins = []
     for s in output:
         #s is like 1:wname:1
-        w_l = s.split(SEP)
+        w_l = s.split(config.SEP)
         win = tmux_obj.Window(s_name,int(w_l[0]))
         win.name = w_l[1]
         win.active = int(w_l[2])
@@ -57,11 +59,12 @@ def load_panes(s_name,w_id):
     panes = []
     for s in output:
         #output format: paneIdx:=:width:=:height:=:path:=:active
-        p_l = s.split(SEP)
+        p_l = s.split(config.SEP)
         pane = tmux_obj.Pane(s_name,w_id,int(p_l[0]))
         pane.size = eval(p_l[1])
         pane.path = p_l[2]
         pane.active = int(p_l[3])
+        #capture pane content
         panes.append(pane)
     return panes
 

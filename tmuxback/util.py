@@ -2,6 +2,7 @@
 import subprocess
 import re
 import json
+import os
 
 def exec_cmd(cmd):
     """execute a shell command
@@ -11,7 +12,12 @@ def exec_cmd(cmd):
         s = re.sub('\n$','',s)
     return s
 
-def to_json(obj):
+def to_json(obj, parent_dir, filename):
+    #if parent path doesn't exist, create the dir
+    if not os.path.exists(parent_dir):
+        os.makedirs(parent_dir)
+
+    jsonfile = os.path.join(parent_dir,filename)
     if obj:
-        with open("/tmp/test/x.json",'w') as f:
+        with open(jsonfile,'w') as f:
             json.dump(obj, f, default = lambda o: o.__dict__, sort_keys=True, indent=4)
