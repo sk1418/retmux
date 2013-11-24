@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from operator import attrgetter
 
 class Tmux(object):
     def __init__(self, tid):
@@ -11,6 +12,13 @@ class Session(object):
         self.attached = False
         self.size = ()
         self.windows = []
+
+    def windows_in_reverse(self):
+        """ 
+        return the list of windows,
+        but sorted by win_id descending
+        """
+        return sorted(self.windows, key=attrgetter('win_id'), reverse=True)
 
 class Window(object):
     def __init__(self,sess_name,wid):

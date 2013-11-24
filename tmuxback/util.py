@@ -3,6 +3,7 @@ import subprocess
 import re
 import json
 import os
+import config
 
 def exec_cmd(cmd):
     """execute a shell command
@@ -27,3 +28,11 @@ def to_json(obj, parent_dir, filename):
     if obj:
         with open(jsonfile,'w') as f:
             json.dump(obj, f, default = lambda o: o.__dict__, sort_keys=True, indent=4)
+
+def all_backups():
+    """get all saved tmux backups"""
+    return [d for d in os.listdir(config.BACKUP_PATH) if os.path.isdir(d)]
+
+def latest_backup():
+    """get latest backup"""
+    return max(all_backups(), key=os.path.getmtime())
