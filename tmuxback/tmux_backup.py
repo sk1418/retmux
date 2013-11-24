@@ -9,7 +9,7 @@ from os import path
 
 
 
-def current_tmux():
+def backup_tmux():
     """get current tmux information and return Tmux object"""
     #id is timestamp
     tmux_id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
@@ -20,13 +20,13 @@ def current_tmux():
 
     util.to_json(tmux, parent_dir, tmux_id + '.json')
 
-    #if parent path doesn't exist, create the dir
     #if tmux and not os.path.exists(parent_dir):
         #os.makedirs(parent_dir)
     for s in tmux.sessions:
         for w in s.windows:
             for p in w.panes:
                 tmux_cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
+
 def load_sessions():
     """load sessions information """
     output = tmux_cmd.get_sessions()
@@ -78,4 +78,4 @@ def load_panes(s_name,w_id):
 
 
 if __name__ == '__main__':
-    current_tmux()
+    backup_tmux()
