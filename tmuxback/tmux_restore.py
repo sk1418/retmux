@@ -18,6 +18,12 @@ def restore_tmux(tmux_id):
     3 - check if there is tmux running and with same session name
     4 - handle windows, panes ..
     """
+    if tmux_id:
+        
+        #TODO check if the given id exists, 
+        pass
+    else:
+        tmux_id = util.latest_backup()
 
     pass
 

@@ -31,8 +31,9 @@ def to_json(obj, parent_dir, filename):
 
 def all_backups():
     """get all saved tmux backups"""
-    return [d for d in os.listdir(config.BACKUP_PATH) if os.path.isdir(d)]
+    bkdir = config.BACKUP_PATH
+    return [d for d in os.listdir(bkdir) if os.path.isdir(os.path.join(bkdir,d))]
 
 def latest_backup():
     """get latest backup"""
-    return max(all_backups(), key=os.path.getmtime())
+    return max(all_backups(), key=os.path.getmtime)
