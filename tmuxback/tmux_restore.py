@@ -11,6 +11,7 @@ from os import path
 LOG = util.get_logger()
 
 WIN_BASE_IDX = tmux_cmd.get_option('base-index')
+#PANE_BASE_IDX = tmux_cmd.get_option('pane-base-index')
 
 def restore_tmux(tmux_id):
     """

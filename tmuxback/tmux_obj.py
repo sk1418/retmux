@@ -29,6 +29,7 @@ class Window(object):
         self.panes = []
         self.active= False
         self.sess_name = ''
+        self.layout=''
 
 class Pane(object):
     """tmux pane object"""

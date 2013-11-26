@@ -59,6 +59,7 @@ def load_windows(s_name):
         win = tmux_obj.Window(s_name,int(w_l[0]))
         win.name = w_l[1]
         win.active = int(w_l[2])
+        win.layout = w_l[3]
         #load panes
         win.panes = load_panes(s_name,win.win_id)
 
