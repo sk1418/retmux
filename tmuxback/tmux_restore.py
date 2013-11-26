@@ -10,6 +10,8 @@ from os import path
 
 LOG = util.get_logger()
 
+WIN_BASE_IDX = tmux_cmd.get_option('base-index')
+
 def restore_tmux(tmux_id):
     """
     retore tmux sessions by given backuped Tmux id
@@ -19,14 +21,48 @@ def restore_tmux(tmux_id):
     3 - check if there is tmux running and with same session name
     4 - handle windows, panes ..
     """
+    #validate given tmux_id
     tmux_id = chk_tmux_id(tmux_id)
+
     LOG.info('loading backuped tmux sessions')
     LOG.debug('load json file:%s'% tmux_id + '.json' )
+
     tmux = util.json_to_obj(tmux_id)
+
     LOG.debug('converted json file to Tmux object')
     LOG.info('backuped tmux sessions loaded')
-
     
+    for sess in  tmux.sessions:
+        #check if session exists
+        if tmux_cmd.has_session(sess.name):
+            LOG.info('found session with same name in current tmux, \
+                    skip restoring the session:%s.' % sess.name)
+            continue
+        restore_session(sess)
+
+
+def restore_session(sess):
+    """create the session from session object"""
+    tmux_cmd.create_session(sess.name,sess.size)
+    for win in sess.windows_in_reverse()[:-1]:
+        #rename, renumber window
+        restore_window(sess.name, win)
+        tmux_cmd.create_empty_window(sess.name, WIN_BASE_IDX)
+
+    # the last window
+        restore_window(sess.name, sess.windows_in_reverse()[-1])
+
+
+def restore_window(sess_name, win):
+    #renumber from base_index to backuped index
+    tmux_cmd.renumber_window(sess_name, WIN_BASE_IDX, win.win_id)
+    #rename win
+    tmux_cmd.rename_window(sess_name,win.win_id)
+    #select window (active)
+    if win.active:
+        tmux_cmd.active_window(sess_name,win_id)
+        
+
 
 
 def chk_tmux_id(tmux_id):
@@ -48,6 +84,3 @@ def chk_tmux_id(tmux_id):
 
     return tmux_id
 
-def chk_session_exists(sess_name):
-    """check if session name exists in current tmux"""
-    pass

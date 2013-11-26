@@ -12,14 +12,17 @@ CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{windo
 #tmux list-panes -t {session}:{windowIdx}
 CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'
 
-CMD_CREATE_SESSION='tmux new-session -d -s%s -n%s -x%d -y%d'
+CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
 
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
 CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
 
 CMD_MOVE_WINDOW='tmux move-window -s%s -t%s'
+CMD_RENAME_WINDOW='tmux rename-window -t%s:%d %s'
 CMD_SHOW_OPTION='tmux show-options -gv %s'
 CMD_HAS_SESSION='tmux has-esssion -t%s'
+CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t %s:%d'
+CMD_ACTIVE_WINDOW = 'tmux select-window -t %s:%d'
 
 
 def get_sessions():
@@ -59,10 +62,28 @@ def capture_pane(pane_idstr,filename):
     cmd = (CMD_CAPTURE_PANE % pane_idstr).split(' ')
     util.exec_cmd_redir(cmd, filename)
 
-def create_session(sess_name,win_name,width,height):
-    p = (sess_name,win_name,width,height)
+def create_session(sess_name,size):
+    p = (sess_name,size[0],size[1])
     cmd = (CMD_CREATE_SESSION % p).split(' ')
     s = util.exec_cmd(cmd)
+
+def create_empty_window(sess_name, base_index):
+    p = (sess_name, base_index)
+    cmd = (CMD_NEW_EMPTY_WINDOW % p).split(' ')
+    util.exec_cmd(cmd)
+
+def active_window(sess_name, win_id):
+    p = (sess_name,win_id)
+    cmd = (CMD_ACTIVE_WINDOW% p).split(' ')
+    util.exec_cmd(cmd)
+
+def rename_window(sess_name, win_id, name):
+    """
+    rename the window in session
+    """
+    p = (sess_name, win_id, name)
+    cmd = (CMD_RENAME_WINDOW % p).split(' ')
+    util.exec_cmd(cmd)
 
 def renumber_window(sess_name, win_id_from, win_id_to):
     """
