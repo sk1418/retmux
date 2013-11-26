@@ -4,6 +4,7 @@ import re
 import json
 import os
 import config
+import logging
 
 def exec_cmd(cmd):
     """execute a shell command
@@ -37,3 +38,33 @@ def all_backups():
 def latest_backup():
     """get latest backup"""
     return max(all_backups(), key=os.path.getmtime)
+
+def setup_log(console_lvl, file_lvl):
+    """setup_log, this function should be called only once at the beginning of application starts"""
+    logger = logging.getLogger('tmuxbackLogger')
+    logger.setLevel(file_lvl)
+
+    # create file handler which logs even debug messages
+    fh = logging.FileHandler(os.path.join(config.USER_PATH,'tmuxback.log'))
+    fh.setLevel(file_lvl)
+
+    # create console handler with a higher log level
+    ch = logging.StreamHandler()
+    ch.setLevel(console_lvl)
+
+    # create formatter and add it to the handlers
+    fhFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    #chFormatter = logging.Formatter('%(levelname)s - %(filename)s - Line: %(lineno)d - %(message)s')
+    chFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+    fh.setFormatter(fhFormatter)
+    ch.setFormatter(chFormatter)
+
+    # add the handlers to logger
+    logger.addHandler(ch)
+    logger.addHandler(fh)
+
+    logger.info("Log system successfully setup")
+
+def get_logger():
+    return logging.getLogger('tmuxbackLogger')

@@ -7,10 +7,12 @@ import datetime,time
 import os
 from os import path 
 
+LOG = util.get_logger()
 
 
 def backup_tmux():
     """get current tmux information and return Tmux object"""
+    LOG.info('backing up the current tmux sessions')
     #id is timestamp
     tmux_id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
     parent_dir    = path.join(config.BACKUP_PATH,tmux_id)
@@ -27,8 +29,11 @@ def backup_tmux():
             for p in w.panes:
                 tmux_cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
 
+    LOG.info('Backup of sessions are saved under %s'%parent_dir)
+
 def load_sessions():
     """load sessions information """
+    LOG.debug('Backup sessions')
     output = tmux_cmd.get_sessions()
     sess = []
 
@@ -45,6 +50,7 @@ def load_sessions():
 
 def load_windows(s_name):
     """load windows for given session name"""
+    LOG.debug('Backup windows of session %s'%s_name)
     output = tmux_cmd.get_windows_from_session(s_name)
     wins = []
     for s in output:
@@ -64,6 +70,7 @@ def load_panes(s_name,w_id):
     """
     load panes for given session name and window idx
     """
+    LOG.debug('Backup panes of window: %s:%d'%(s_name,w_id))
     output = tmux_cmd.get_panes_from_sess_win(s_name,w_id)
     panes = []
     for s in output:
@@ -76,6 +83,3 @@ def load_panes(s_name,w_id):
         panes.append(pane)
     return panes
 
-
-if __name__ == '__main__':
-    backup_tmux()
