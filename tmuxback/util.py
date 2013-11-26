@@ -5,6 +5,7 @@ import json
 import os
 import config
 import logging
+import tmux_obj
 
 def exec_cmd(cmd):
     """execute a shell command
@@ -28,7 +29,17 @@ def to_json(obj, parent_dir, filename):
     jsonfile = os.path.join(parent_dir,filename)
     if obj:
         with open(jsonfile,'w') as f:
-            json.dump(obj, f, default = lambda o: o.__dict__, sort_keys=True, indent=4)
+            json.dump(obj, f, default = tmux_obj.object2dict, sort_keys=True, indent=4)
+
+def json_to_obj(filename):
+    """load json file, convert to Tmux object, the parent dir 
+    is fixed config.BACKUP_PATH/filename/
+    """
+    jsonfile = os.path.join(config.BACKUP_PATH,filename,filename+'.json')
+
+    with open(jsonfile,'r') as f:
+        obj = json.load(f, object_hook=tmux_obj.dict2object)
+    print obj.sessions
 
 def all_backups():
     """get all saved tmux backups"""
@@ -54,8 +65,8 @@ def setup_log(console_lvl, file_lvl):
 
     # create formatter and add it to the handlers
     fhFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    #chFormatter = logging.Formatter('%(levelname)s - %(filename)s - Line: %(lineno)d - %(message)s')
-    chFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    chFormatter = logging.Formatter('%(levelname)s - %(filename)s - Line: %(lineno)d - %(message)s') \
+            if console_lvl == logging.DEBUG else logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
     fh.setFormatter(fhFormatter)
     ch.setFormatter(chFormatter)
@@ -64,7 +75,7 @@ def setup_log(console_lvl, file_lvl):
     logger.addHandler(ch)
     logger.addHandler(fh)
 
-    logger.info("Log system successfully setup")
+    logger.info("Log system setup successfully")
 
 def get_logger():
     return logging.getLogger('tmuxbackLogger')
