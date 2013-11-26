@@ -8,7 +8,6 @@ import util
 
 #list sessions
 CMD_LIST_SESSIONS='tmux list-sessions -F#S:=:(#{session_width},#{session_height}):=:#{session_attached}'
-CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
 #tmux list-panes -t {session}:{windowIdx}
 CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'
 
@@ -16,13 +15,17 @@ CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
 
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
 CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
-
-CMD_MOVE_WINDOW='tmux move-window -s%s -t%s'
-CMD_RENAME_WINDOW='tmux rename-window -t%s:%d %s'
 CMD_SHOW_OPTION='tmux show-options -gv %s'
 CMD_HAS_SESSION='tmux has-esssion -t%s'
-CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t %s:%d'
-CMD_ACTIVE_WINDOW = 'tmux select-window -t %s:%d'
+CMD_SET_PANE_PATH='tmux send-keys -t%s "cd %s"'
+
+CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
+CMD_MOVE_WINDOW='tmux move-window -s%s -t%s'
+CMD_RENAME_WINDOW='tmux rename-window -t%s:%d %s'
+CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t%s:%d'
+CMD_ACTIVE_WINDOW = 'tmux select-window -t%s:%d'
+CMD_SPLIT_WINDOW = 'tmux split-window -d -t%s:%d.%d'
+CMD_SET_LAYOUT = 'tmux select-layout -t%s:%d %s'
 
 
 def get_sessions():
@@ -54,6 +57,11 @@ def get_panes_from_sess_win(sess_name,win_idx):
     s = util.exec_cmd(cmd)
     return s.split('\n')
 
+def set_pane_path(pane_idstr, path):
+    cmd = (CMD_CAPTURE_PANE % (pane_idstr,path)).split(' ')
+    util.exec_cmd_redir(cmd, filename)
+
+
 def capture_pane(pane_idstr,filename):
     """
     capture pane content and save in given filename.
@@ -72,9 +80,19 @@ def create_empty_window(sess_name, base_index):
     cmd = (CMD_NEW_EMPTY_WINDOW % p).split(' ')
     util.exec_cmd(cmd)
 
+def split_window(sess_name, win_id, pane_min_id):
+    p = (sess_name,win_id, pane_min_id)
+    cmd = (CMD_SPLIT_WINDOW % p).split(' ')
+    util.exec_cmd(cmd)
+
 def active_window(sess_name, win_id):
     p = (sess_name,win_id)
     cmd = (CMD_ACTIVE_WINDOW% p).split(' ')
+    util.exec_cmd(cmd)
+
+def select_layout(sess_name, win_id, layout):
+    p = (sess_name,win_id,layout)
+    cmd = (CMD_SET_LAYOUT% p).split(' ')
     util.exec_cmd(cmd)
 
 def rename_window(sess_name, win_id, name):

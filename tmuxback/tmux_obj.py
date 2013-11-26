@@ -30,6 +30,12 @@ class Window(object):
         self.active= False
         self.sess_name = ''
         self.layout=''
+        self.__min_pane_id = None
+
+    def min_pane_id():
+        if self.__min_pane_id == None :
+            self.__min_pane_id = sorted(self.panes, key=attrgetter('pane_id'))[0] 
+        return self.__min_pane_id
 
 class Pane(object):
     """tmux pane object"""

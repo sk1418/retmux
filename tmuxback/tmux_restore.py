@@ -54,16 +54,34 @@ def restore_session(sess):
         restore_window(sess.name, sess.windows_in_reverse()[-1])
 
 
-def restore_window(sess_name, win):
+def restore_window(win):
+    LOG.info('restoring window: %' % win.sess_name+':'+win.win_id)
     #renumber from base_index to backuped index
-    tmux_cmd.renumber_window(sess_name, WIN_BASE_IDX, win.win_id)
+    tmux_cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
     #rename win
-    tmux_cmd.rename_window(sess_name,win.win_id)
+    tmux_cmd.rename_window(win.sess_name,win.win_id)
+    
     #select window (active)
     if win.active:
-        tmux_cmd.active_window(sess_name,win_id)
-        
+        tmux_cmd.active_window(win.sess_name,win_id)
 
+    if len(win.panes) >1 :
+        #multiple panes
+        #split
+        for i in range(len(win.panes)-1):
+            tmux_cmd.split_window(win.sess_name,window,win.min_pane_id())
+
+    for p in win.panes:
+        restore_pane(p)
+
+    #set layout
+    tmux_cmd.select_layout(sess_name,win.win_id,win.layout)
+
+def restore_pane(pane):
+    LOG.info('restoring pane: %'% pane.idstr())
+    #set path
+    tmux_cmd.set_pane_path(pane.idstr(), pane.path)
+    # restore content
 
 
 def chk_tmux_id(tmux_id):
