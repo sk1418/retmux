@@ -3,6 +3,7 @@ import subprocess
 import re
 import util
 
+LOG = util.get_logger()
 
 #tmux commands
 
@@ -16,7 +17,7 @@ CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
 CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
 CMD_SHOW_OPTION='tmux show-options -gv %s'
-CMD_HAS_SESSION='tmux has-esssion -t%s'
+CMD_HAS_SESSION='tmux has-session -t%s'
 CMD_SET_PANE_PATH='tmux send-keys -t%s "cd %s"'
 
 CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
@@ -121,4 +122,4 @@ def get_option(option):
 def has_session(sess_name):
     """check if a session exists already"""
     cmd = (CMD_HAS_SESSION%sess_name).split(' ')
-    return util.exec_cmd(cmd) == '1'
+    return util.cmd_return_code(cmd) == 0

@@ -9,11 +9,19 @@ import tmux_obj
 
 def exec_cmd(cmd):
     """execute a shell command
+    the cmd argument is a list
     return the output with the last linebreak '\n' removed"""
     s = subprocess.check_output(cmd)
     if s:
         s = re.sub('\n$','',s)
     return s
+def cmd_return_code(cmd):
+    """execute a shell command
+    the cmd argument is a list
+    return the return code"""
+    return subprocess.call(cmd)
+    
+
 
 def exec_cmd_redir(cmd, file_fullname):
     """execute a shell command
@@ -37,9 +45,12 @@ def json_to_obj(filename):
     """
     jsonfile = os.path.join(config.BACKUP_PATH,filename,filename+'.json')
 
+    tmux = None
+
     with open(jsonfile,'r') as f:
-        obj = json.load(f, object_hook=tmux_obj.dict2object)
-    print obj.sessions
+        tmux = json.load(f, object_hook=tmux_obj.dict2object)
+    return tmux
+
 
 def all_backups():
     """get all saved tmux backups"""
@@ -48,7 +59,7 @@ def all_backups():
 
 def latest_backup():
     """get latest backup"""
-    return max(all_backups(), key=os.path.getmtime)
+    return max([os.path.join(config.BACKUP_PATH,p) for p in all_backups()], key=os.path.getmtime)
 
 def setup_log(console_lvl, file_lvl):
     """setup_log, this function should be called only once at the beginning of application starts"""

@@ -29,15 +29,15 @@ def restore_tmux(tmux_id):
     LOG.debug('load json file:%s'% tmux_id + '.json' )
 
     tmux = util.json_to_obj(tmux_id)
-
     LOG.debug('converted json file to Tmux object')
     LOG.info('backuped tmux sessions loaded')
     
     for sess in  tmux.sessions:
+        LOG.debug('processing session name %s'%sess.name)
         #check if session exists
         if tmux_cmd.has_session(sess.name):
             LOG.info('found session with same name in current tmux, \
-                    skip restoring the session:%s.' % sess.name)
+skip restoring the session:%s.' % sess.name)
             continue
         restore_session(sess)
 
@@ -98,7 +98,7 @@ def chk_tmux_id(tmux_id):
             LOG.error('cannot find given backup name')
             sys.exit(1)
     else:
-        tmux_id = util.latest_backup()
+        tmux_id = util.latest_backup().split('/')[-1]
         LOG.info('backup name is empty, using last backup:%s'%tmux_id)
 
     return tmux_id
