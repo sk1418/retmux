@@ -18,7 +18,7 @@ CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
 CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
 CMD_SHOW_OPTION='tmux show-options -gv %s'
 CMD_HAS_SESSION='tmux has-session -t%s'
-CMD_SET_PANE_PATH='tmux send-keys -t%s "cd %s"'
+CMD_SET_PANE_PATH='tmux send-keys -t%s cd \"%s\"\nclear\n'
 
 CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
 CMD_MOVE_WINDOW='tmux move-window -s%s -t%s'
@@ -59,8 +59,9 @@ def get_panes_from_sess_win(sess_name,win_idx):
     return s.split('\n')
 
 def set_pane_path(pane_idstr, path):
-    cmd = (CMD_CAPTURE_PANE % (pane_idstr,path)).split(' ')
-    util.exec_cmd_redir(cmd, filename)
+    """ set pane path by 'send-key' and clear the screen"""
+    cmd = (CMD_SET_PANE_PATH % (pane_idstr,path)).split(' ',3)
+    util.exec_cmd(cmd)
 
 
 def capture_pane(pane_idstr,filename):
@@ -77,12 +78,12 @@ def create_session(sess_name,size):
     s = util.exec_cmd(cmd)
 
 def create_empty_window(sess_name, base_index):
-    p = (sess_name, base_index)
+    p = (sess_name, int(base_index))
     cmd = (CMD_NEW_EMPTY_WINDOW % p).split(' ')
     util.exec_cmd(cmd)
 
 def split_window(sess_name, win_id, pane_min_id):
-    p = (sess_name,win_id, pane_min_id)
+    p = (sess_name,int(win_id), int(pane_min_id))
     cmd = (CMD_SPLIT_WINDOW % p).split(' ')
     util.exec_cmd(cmd)
 
@@ -109,7 +110,7 @@ def renumber_window(sess_name, win_id_from, win_id_to):
     renumber the window in session
     """
     p = (sess_name  + ':' + str(win_id_from), \
-        sess_name + ':' + win_id_to)
+        sess_name + ':' + str(win_id_to))
 
     cmd = (CMD_MOVE_WINDOW % p).split(' ')
     util.exec_cmd(cmd)

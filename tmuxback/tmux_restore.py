@@ -44,41 +44,45 @@ skip restoring the session:%s.' % sess.name)
 
 def restore_session(sess):
     """create the session from session object"""
+    LOG.debug('create session, with initial win: %s' % sess.name)
     tmux_cmd.create_session(sess.name,sess.size)
     for win in sess.windows_in_reverse()[:-1]:
         #rename, renumber window
-        restore_window(sess.name, win)
+        restore_window( win)
+
+        LOG.debug('create empty window with baseIdx: %s' % WIN_BASE_IDX)
         tmux_cmd.create_empty_window(sess.name, WIN_BASE_IDX)
 
     # the last window
-        restore_window(sess.name, sess.windows_in_reverse()[-1])
+    restore_window( sess.windows_in_reverse()[-1],False)
 
 
-def restore_window(win):
-    LOG.info('restoring window: %' % win.sess_name+':'+win.win_id)
+def restore_window(win,renumber=True):
+    LOG.info('restoring window: %s' % win.sess_name+':'+str(win.win_id))
     #renumber from base_index to backuped index
-    tmux_cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
+    if renumber:
+        tmux_cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
     #rename win
-    tmux_cmd.rename_window(win.sess_name,win.win_id)
+    tmux_cmd.rename_window(win.sess_name,win.win_id,win.name)
     
     #select window (active)
     if win.active:
-        tmux_cmd.active_window(win.sess_name,win_id)
+        tmux_cmd.active_window(win.sess_name,win.win_id)
 
     if len(win.panes) >1 :
         #multiple panes
         #split
         for i in range(len(win.panes)-1):
-            tmux_cmd.split_window(win.sess_name,window,win.min_pane_id())
+            tmux_cmd.split_window(win.sess_name,win.win_id,win.min_pane_id())
 
     for p in win.panes:
         restore_pane(p)
 
     #set layout
-    tmux_cmd.select_layout(sess_name,win.win_id,win.layout)
+    tmux_cmd.select_layout(win.sess_name, win.win_id, win.layout)
 
 def restore_pane(pane):
-    LOG.info('restoring pane: %'% pane.idstr())
+    LOG.info('restoring pane: %s'% pane.idstr())
     #set path
     tmux_cmd.set_pane_path(pane.idstr(), pane.path)
     # restore content

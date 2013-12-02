@@ -28,13 +28,14 @@ class Window(object):
         self.name = 'win' + str(wid)
         self.panes = []
         self.active= False
-        self.sess_name = ''
+        self.sess_name = sess_name
         self.layout=''
         self.__min_pane_id = None
 
-    def min_pane_id():
+    def min_pane_id(self):
         if self.__min_pane_id == None :
-            self.__min_pane_id = sorted(self.panes, key=attrgetter('pane_id'))[0] 
+            self.__min_pane_id = \
+                    sorted(self.panes, key=attrgetter('pane_id'))[0] .pane_id
         return self.__min_pane_id
 
 class Pane(object):
