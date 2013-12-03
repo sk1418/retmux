@@ -39,14 +39,12 @@ def to_json(obj, parent_dir, filename):
         with open(jsonfile,'w') as f:
             json.dump(obj, f, default = tmux_obj.object2dict, sort_keys=True, indent=4)
 
-def json_to_obj(filename):
-    """load json file, convert to Tmux object, the parent dir 
-    is fixed config.BACKUP_PATH/filename/
+def json_to_obj(jsonfile):
+    """load json file
+    the file would be the absolute path of json
     """
-    jsonfile = os.path.join(config.BACKUP_PATH,filename,filename+'.json')
 
     tmux = None
-
     with open(jsonfile,'r') as f:
         tmux = json.load(f, object_hook=tmux_obj.dict2object)
     return tmux

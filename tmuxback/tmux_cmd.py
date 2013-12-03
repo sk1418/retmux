@@ -27,6 +27,9 @@ CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t%s:%d'
 CMD_ACTIVE_WINDOW = 'tmux select-window -t%s:%d'
 CMD_SPLIT_WINDOW = 'tmux split-window -d -t%s:%d.%d'
 CMD_SET_LAYOUT = 'tmux select-layout -t%s:%d %s'
+CMD_LOAD_BUFFER = 'tmux load-buffer %s'
+CMD_PASTE_BUFFER = 'tmux paste-buffer -drp -t%s'
+CMD_LOAD_CONTENT = 'tmux send-keys -t%s cat %s\n'
 
 
 def get_sessions():
@@ -124,3 +127,12 @@ def has_session(sess_name):
     """check if a session exists already"""
     cmd = (CMD_HAS_SESSION%sess_name).split(' ')
     return util.cmd_return_code(cmd) == 0
+
+def restore_pane_content(pane_idstr,filename):
+    """restore backuped pane content. This is done in two
+    steps, 
+    1: load buffer from file
+    2: paste buffer
+    """
+    cmd = (CMD_LOAD_CONTENT %  (pane_idstr,filename)).split(' ',3)
+    util.exec_cmd(cmd)
