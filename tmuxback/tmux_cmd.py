@@ -27,8 +27,6 @@ CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t%s:%d'
 CMD_ACTIVE_WINDOW = 'tmux select-window -t%s:%d'
 CMD_SPLIT_WINDOW = 'tmux split-window -d -t%s:%d.%d'
 CMD_SET_LAYOUT = 'tmux select-layout -t%s:%d %s'
-CMD_LOAD_BUFFER = 'tmux load-buffer %s'
-CMD_PASTE_BUFFER = 'tmux paste-buffer -drp -t%s'
 CMD_LOAD_CONTENT = 'tmux send-keys -t%s cat %s\n'
 
 
