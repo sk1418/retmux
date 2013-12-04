@@ -1,0 +1,67 @@
+#!/usr/bin/python
+
+import sys
+import tmuxbk.controller as controller
+import tmuxbk.config as config
+
+"""
+the start point of tmuxback. 
+"""
+
+help_info = """
+    tmuxback (get my tmux back) is tool to backup and restore tmux sessions.
+    Usage tmuxback [options]
+    
+    [OPTIONS] 
+        -h print help message
+        -l list all backups
+        -v version
+        -b [name] backup current tmux sessions with given name. if 
+                  name is empty, using default name.(timestamp)
+        -r [name] restore sessions from named backup. If name is empty, 
+                  restore from latest default backup name.
+    """
+
+
+def usage():
+    """print usage information"""
+    print help_info
+
+def version():
+    """print version"""
+    print config.VERSION
+
+actions = {
+    '-l'  : controller.list_all,
+    '-b'  : controller.backup,
+    '-r'  : controller.restore,
+    '-h'  : usage,
+    '-v'  : version
+}
+
+if __name__ == '__main__':
+    #check if config file init is required
+    #TODO
+
+    #load config
+    #TODO
+    
+    
+    #process user input options
+    if sys.argv.__len__() <2 or not sys.argv[1]:
+        usage()
+        sys.exit(1)
+    else: 
+        func = actions.get(sys.argv[1])
+
+        #backup or restore
+        if sys.argv[1] == '-b' or sys.argv[1] == '-r':
+            if sys.argv.__len__() == 3 and sys.argv[2]:
+                func(sys.argv[2]) 
+            else:
+                func(None)
+                sys.exit(0)
+        else:
+            func() if func else usage()
+            sys.exit(0)
+
