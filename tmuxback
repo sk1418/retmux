@@ -1,8 +1,11 @@
 #!/usr/bin/python
+# -*- coding:utf-8 -*-
 
 import sys
 import tmuxbk.controller as controller
 import tmuxbk.config as config
+import tmuxbk.util as util
+import logging
 
 """
 the start point of tmuxback. 
@@ -33,8 +36,8 @@ def version():
 
 actions = {
     '-l'  : controller.list_all,
-    '-b'  : controller.backup,
-    '-r'  : controller.restore,
+    #'-b'  : controller.backup,
+    #'-r'  : controller.restore,
     '-h'  : usage,
     '-v'  : version
 }
@@ -44,9 +47,10 @@ if __name__ == '__main__':
     #TODO
 
     #load config
-    #TODO
+    #TODO 
     
-    
+    #FIXME the log level should be read from config
+    util.setup_log(logging.DEBUG, logging.DEBUG)
     #process user input options
     if sys.argv.__len__() <2 or not sys.argv[1]:
         usage()

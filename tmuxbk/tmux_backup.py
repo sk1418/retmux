@@ -9,7 +9,8 @@ from os import path
 
 LOG = util.get_logger()
 
-
+#FIXME here we need a parameter "name", same idea as restore, if name is empty,
+# use default name. name should be uniq too, (check needed)
 def backup_tmux():
     """get current tmux information and return Tmux object"""
     LOG.info('backing up the current tmux sessions')
@@ -37,6 +38,7 @@ def load_sessions():
     output = tmux_cmd.get_sessions()
     sess = []
 
+    #FIXME If no session, no backup., the output parsing part need to be fixed.
     for s in output:
         #s is like  sessName:(200,300):1
         s_l = s.split(config.SEP)
