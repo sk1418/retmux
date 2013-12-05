@@ -2,6 +2,7 @@
 import util
 import tmux_backup
 import tmux_restore
+import tmux_obj
 import config
 import datetime,time
 import logging
@@ -20,11 +21,17 @@ def list_all():
     if not l or len(l) == 0:
         print "No backup was created yet.\ntmuxback -b [name] to create backup" 
     else:
+
         last = util.latest_backup().split('/')[-1]
-        l = [ b for b in l if b != last]
+        bk_list = [ b for b in l if b != last]
         print "Tmux backups list:(the latest default backup name with '*'):"
-        print "(*)"+last
-        print '\n'.join(l)
+
+        latest_tmux = util.get_tmux_by_id(last)
+        print '(*)' + latest_tmux.short_info()
+
+        for tmux_id in bk_list:
+            tmux = util.get_tmux_by_id(tmux_id)
+            print tmux.short_info()
        
 def backup(name=None):
     """backup current tmux sessions with given name

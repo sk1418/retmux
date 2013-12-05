@@ -5,6 +5,7 @@ import tmux_obj
 import config
 import os,sys
 from os import path 
+import datetime,time
 
 LOG = util.get_logger()
 
@@ -17,6 +18,7 @@ def backup_tmux(tmux_id):
     parent_dir    = path.join(config.BACKUP_PATH,tmux_id)
 
     tmux          = tmux_obj.Tmux(tmux_id)
+    tmux.create_time = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     tmux.sessions = load_sessions()
 
     util.to_json(tmux, parent_dir, tmux_id + '.json')
