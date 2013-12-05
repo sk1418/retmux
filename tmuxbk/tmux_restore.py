@@ -16,15 +16,10 @@ WIN_BASE_IDX = int(tmux_cmd.get_option('base-index'))
 def restore_tmux(tmux_id):
     """
     retore tmux sessions by given backuped Tmux id
-    0 - read all backups from $HOME/.tmuxback/backup
-    1 - if the given tmux_id is empty, take the latest
-    2 - throw error msg if given name doesn't exist
-    3 - check if there is tmux running and with same session name
-    4 - handle windows, panes ..
+     - check if there is tmux running and with same session name
+     - handle windows, panes ..
     """
     #validate given tmux_id
-    tmux_id = chk_tmux_id(tmux_id)
-
     LOG.info('loading backuped tmux sessions')
     jsonfile = os.path.join(config.BACKUP_PATH,tmux_id,tmux_id+'.json')
     LOG.debug('load json file:%s'% jsonfile )
@@ -91,24 +86,4 @@ def restore_pane(pane, tmux_id):
     filename = os.path.join(config.BACKUP_PATH,tmux_id,pane.idstr())
 
     tmux_cmd.restore_pane_content(pane.idstr(), filename)
-
-
-def chk_tmux_id(tmux_id):
-    """check the tmux_id (backup name)"""
-    #if no backup exists, exit application
-    all_bk =util.all_backups() 
-    if len(all_bk)<1:
-        LOG.error('backup dir is empty, nothing to restore')
-        sys.exit(1)
-
-    #checking tmux_id
-    if tmux_id:
-        if not all_bk.__contains__(tmux_id):
-            LOG.error('cannot find given backup name')
-            sys.exit(1)
-    else:
-        tmux_id = util.latest_backup().split('/')[-1]
-        LOG.info('backup name is empty, using last backup:%s'%tmux_id)
-
-    return tmux_id
 

@@ -59,12 +59,9 @@ if __name__ == '__main__':
         func = actions.get(sys.argv[1])
 
         #backup or restore
-        if sys.argv[1] == '-b' or sys.argv[1] == '-r':
-            if sys.argv.__len__() == 3 and sys.argv[2]:
-                func(sys.argv[2]) 
-            else:
-                func(None)
-                sys.exit(0)
+        if sys.argv[1] in ('-b','-r') \
+                and sys.argv.__len__() == 3 :
+            func(sys.argv[2]) 
         else:
             func() if func else usage()
             sys.exit(0)

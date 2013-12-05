@@ -3,7 +3,6 @@ import util
 import tmux_cmd
 import tmux_obj
 import config
-import datetime,time
 import os,sys
 from os import path 
 
@@ -11,11 +10,8 @@ LOG = util.get_logger()
 
 def backup_tmux(tmux_id):
     """get current tmux information and return Tmux object
-    if the given tmux_id is not empty, use it as backup name, otherwise
-    use default timestamp string for name
     """
 
-    tmux_id = check_tmux_id(tmux_id)
     LOG.info('backing up the current tmux sessions')
     #id is timestamp
     parent_dir    = path.join(config.BACKUP_PATH,tmux_id)
@@ -33,18 +29,6 @@ def backup_tmux(tmux_id):
                 tmux_cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
 
     LOG.info('Backup of sessions are saved under %s'%parent_dir)
-
-def check_tmux_id(tmux_id):
-    """validate the given tmux_id, and return the valid value"""
-    if not tmux_id:
-        return datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
-    if path.isdir(path.join(config.BACKUP_PATH,tmux_id)):
-        LOG.error('the given backup name exists already, aborted.')
-        sys.exit(1)
-    return tmux_id
-
-        
-
 
 def load_sessions():
     """load sessions information """
