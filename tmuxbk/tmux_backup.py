@@ -4,18 +4,20 @@ import tmux_cmd
 import tmux_obj
 import config
 import datetime,time
-import os
+import os,sys
 from os import path 
 
 LOG = util.get_logger()
 
-#FIXME here we need a parameter "name", same idea as restore, if name is empty,
-# use default name. name should be uniq too, (check needed)
-def backup_tmux():
-    """get current tmux information and return Tmux object"""
+def backup_tmux(tmux_id):
+    """get current tmux information and return Tmux object
+    if the given tmux_id is not empty, use it as backup name, otherwise
+    use default timestamp string for name
+    """
+
+    tmux_id = check_tmux_id(tmux_id)
     LOG.info('backing up the current tmux sessions')
     #id is timestamp
-    tmux_id = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
     parent_dir    = path.join(config.BACKUP_PATH,tmux_id)
 
     tmux          = tmux_obj.Tmux(tmux_id)
@@ -32,13 +34,28 @@ def backup_tmux():
 
     LOG.info('Backup of sessions are saved under %s'%parent_dir)
 
+def check_tmux_id(tmux_id):
+    """validate the given tmux_id, and return the valid value"""
+    if not tmux_id:
+        return datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+    if path.isdir(path.join(config.BACKUP_PATH,tmux_id)):
+        LOG.error('the given backup name exists already, aborted.')
+        sys.exit(1)
+    return tmux_id
+
+        
+
+
 def load_sessions():
     """load sessions information """
-    LOG.debug('Backup sessions')
+    LOG.debug('Backup tmux sessions...')
+
+    if not tmux_cmd.has_tmux_session():
+        LOG.info("No tmux session found, nothing to backup")
+        sys.exit(0)
+
     output = tmux_cmd.get_sessions()
     sess = []
-
-    #FIXME If no session, no backup., the output parsing part need to be fixed.
     for s in output:
         #s is like  sessName:(200,300):1
         s_l = s.split(config.SEP)

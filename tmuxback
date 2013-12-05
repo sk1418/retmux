@@ -36,8 +36,8 @@ def version():
 
 actions = {
     '-l'  : controller.list_all,
-    #'-b'  : controller.backup,
-    #'-r'  : controller.restore,
+    '-b'  : controller.backup, 
+    '-r'  : controller.restore,
     '-h'  : usage,
     '-v'  : version
 }

@@ -24,6 +24,7 @@ def list_all():
        
 def backup(name=None):
     """backup current tmux sessions with given name"""
+    
     pass
     
 def restore(name=None):
