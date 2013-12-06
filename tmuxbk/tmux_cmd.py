@@ -29,7 +29,7 @@ CMD_SPLIT_WINDOW = 'tmux split-window -d -t%s:%d.%d'
 CMD_SET_LAYOUT = 'tmux select-layout -t%s:%d %s'
 CMD_LOAD_CONTENT = 'tmux send-keys -t%s cat %s\n'
 
-def has_tmux_session():
+def has_tmux_server():
     cmd = CMD_LIST_SESSIONS.split(' ')
     code = util.cmd_return_code(cmd)
     return code == 0

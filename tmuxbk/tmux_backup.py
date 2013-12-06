@@ -36,7 +36,7 @@ def load_sessions():
     """load sessions information """
     LOG.debug('Backup tmux sessions...')
 
-    if not tmux_cmd.has_tmux_session():
+    if not tmux_cmd.has_tmux_server():
         LOG.info("No tmux session found, nothing to backup")
         sys.exit(0)
 
