@@ -3,7 +3,6 @@ import os
 import shutil, sys
 import ConfigParser
 
-LOG = util.get_logger()
 
 VERSION     = '1.0.0'                #software version
 #the separator of tmux command output
@@ -46,8 +45,6 @@ def __init_config():
     """
     create .tmuxback under home
     """
-    LOG.info( "run the tmuxback 1st time. create .tmuxback under your $HOME")
     #mkdir and copy files
     os.makedirs(BACKUP_PATH)
     shutil.copy(SAMPLE_CONF,USER_PATH)
-    LOG.info( "configuration files are initialized")

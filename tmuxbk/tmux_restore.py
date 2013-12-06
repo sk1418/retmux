@@ -2,13 +2,14 @@
 import util
 import tmux_cmd
 import tmux_obj
+import tmux_log
 import config
 import datetime,time
 import os,sys
 from os import path 
 
 
-LOG = util.get_logger()
+LOG = tmux_log.get_logger()
 
 WIN_BASE_IDX = int(tmux_cmd.get_option('base-index'))
 #PANE_BASE_IDX = tmux_cmd.get_option('pane-base-index')

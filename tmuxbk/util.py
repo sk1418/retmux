@@ -4,7 +4,7 @@ import re
 import json
 import os
 import config
-import logging
+import logging, logging.handlers
 import tmux_obj
 
 def object2dict(obj):
@@ -96,42 +96,6 @@ def all_backups():
     """get all saved tmux backups"""
     bkdir = config.BACKUP_PATH
     return [d for d in os.listdir(bkdir) if os.path.isdir(os.path.join(bkdir,d))]
-
 def latest_backup():
     """get latest backup"""
     return max([os.path.join(config.BACKUP_PATH,p) for p in all_backups()], key=os.path.getmtime)
-
-def setup_log(console_lvl, file_lvl):
-    """setup_log, this function should be called only once at the beginning of application starts"""
-    logger = logging.getLogger('tmuxbackLogger')
-    logger.setLevel(file_lvl)
-
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(os.path.join(config.USER_PATH,'tmuxback.log'))
-    fh.setLevel(file_lvl)
-
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(console_lvl)
-
-    cformat_dict = {
-            logging.INFO  : '%(levelname)s - %(message)s' ,
-            logging.WARN  : '%(levelname)s - %(message)s' ,
-            logging.ERROR : '%(levelname)s - %(message)s' ,
-            logging.DEBUG : '%(asctime)s - %(levelname)s - %(filename)s - Line : %(lineno)d - %(message)s'
-            }
-    # create formatter and add it to the handlers
-    fhFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    chFormatter = logging.Formatter(cformat_dict[console_lvl])
-
-    fh.setFormatter(fhFormatter)
-    ch.setFormatter(chFormatter)
-
-    # add the handlers to logger
-    logger.addHandler(ch)
-    logger.addHandler(fh)
-
-    logger.debug("Log system setup successfully")
-
-def get_logger():
-    return logging.getLogger('tmuxbackLogger')

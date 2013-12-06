@@ -2,8 +2,9 @@
 import subprocess
 import re
 import util
+import tmux_log
 
-LOG = util.get_logger()
+LOG = tmux_log.get_logger()
 
 #tmux commands
 

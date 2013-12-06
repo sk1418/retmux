@@ -2,12 +2,13 @@
 import util
 import tmux_cmd
 import tmux_obj
+import tmux_log
 import config
 import os,sys
 from os import path 
 import datetime,time
 
-LOG = util.get_logger()
+LOG = tmux_log.get_logger()
 
 def backup_tmux(tmux_id):
     """get current tmux information and return Tmux object

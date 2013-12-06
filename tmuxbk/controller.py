@@ -5,11 +5,11 @@ import tmux_restore
 import tmux_obj
 import config
 import datetime,time
-import logging
+import logging, tmux_log
 import os,sys
 from os import path 
 
-LOG = util.get_logger()
+LOG = tmux_log.get_logger()
 
 def list_all():
     """list all backups"""

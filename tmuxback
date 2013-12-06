@@ -6,6 +6,7 @@ import tmuxbk.controller as controller
 import tmuxbk.config as config
 import tmuxbk.util as util
 import logging
+import tmuxbk.tmux_log as log
 
 """
 the start point of tmuxback. 
@@ -50,7 +51,7 @@ if __name__ == '__main__':
     #TODO 
     
     #FIXME the log level should be read from config
-    util.setup_log(logging.DEBUG, logging.DEBUG)
+    log.setup_log(logging.DEBUG, logging.DEBUG)
     #process user input options
     if sys.argv.__len__() <2 or not sys.argv[1]:
         usage()
