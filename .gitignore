@@ -3,6 +3,7 @@ dist/*.*
 *.pyc
 *.class
 *.swp
+*.swo
 *.*~
 *.bak
 *.egg-info/*.*
