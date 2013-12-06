@@ -19,19 +19,20 @@ def list_all():
 #     backup/writing to json module needs to be changed too.
     l = util.all_backups()
     if not l or len(l) == 0:
-        print "No backup was created yet.\ntmuxback -b [name] to create backup" 
+        LOG.info( "No backup was created yet.\ntmuxback -b [name] to create backup" )
     else:
 
+        LOG.info( tmux_obj.Tmux.short_format%('name(*:latest)','sessions','create'))
+        LOG.info( '-'*72)
         last = util.latest_backup().split('/')[-1]
         bk_list = [ b for b in l if b != last]
-        print "Tmux backups list:(the latest default backup name with '*'):"
 
         latest_tmux = util.get_tmux_by_id(last)
-        print '(*)' + latest_tmux.short_info()
+        LOG.info( latest_tmux.short_info().replace(' ','*',1))
 
         for tmux_id in bk_list:
             tmux = util.get_tmux_by_id(tmux_id)
-            print tmux.short_info()
+            LOG.info( tmux.short_info())
        
 def backup(name=None):
     """backup current tmux sessions with given name

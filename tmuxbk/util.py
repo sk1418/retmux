@@ -114,10 +114,15 @@ def setup_log(console_lvl, file_lvl):
     ch = logging.StreamHandler()
     ch.setLevel(console_lvl)
 
+    cformat_dict = {
+            logging.INFO  : '%(levelname)s - %(message)s' ,
+            logging.WARN  : '%(levelname)s - %(message)s' ,
+            logging.ERROR : '%(levelname)s - %(message)s' ,
+            logging.DEBUG : '%(asctime)s - %(levelname)s - %(filename)s - Line : %(lineno)d - %(message)s'
+            }
     # create formatter and add it to the handlers
     fhFormatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    chFormatter = logging.Formatter('%(levelname)s - %(filename)s - Line: %(lineno)d - %(message)s') \
-            if console_lvl == logging.DEBUG else logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    chFormatter = logging.Formatter(cformat_dict[console_lvl])
 
     fh.setFormatter(fhFormatter)
     ch.setFormatter(chFormatter)
@@ -126,7 +131,7 @@ def setup_log(console_lvl, file_lvl):
     logger.addHandler(ch)
     logger.addHandler(fh)
 
-    logger.info("Log system setup successfully")
+    logger.debug("Log system setup successfully")
 
 def get_logger():
     return logging.getLogger('tmuxbackLogger')

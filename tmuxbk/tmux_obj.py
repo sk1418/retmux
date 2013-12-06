@@ -2,6 +2,7 @@
 from operator import attrgetter
 
 class Tmux(object):
+    short_format = '  %-17s %-30s %s'
     """ a backuped Tmux object """
     def __init__(self, tid):
         self.tid = tid
@@ -10,13 +11,10 @@ class Tmux(object):
 
     def short_info(self):
         """ short info of this tmux object"""
-        #TODO format the string.
-        info = '%s %d sessions %s -backuped on %s'
         p = (self.tid, 
-               len(self.sessions),
-               [s.name for s in self.sessions],
+               ', '.join([s.name for s in self.sessions]),
                self.create_time)
-        return info % p
+        return Tmux.short_format % p
 
     def long_info(self):
         """ longer info of this tmux object"""
