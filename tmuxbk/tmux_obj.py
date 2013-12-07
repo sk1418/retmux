@@ -2,7 +2,7 @@
 from operator import attrgetter
 
 class Tmux(object):
-    short_format = '  %-17s %-30s %s'
+    short_format = '%-17s %-30s %s'
     """ a backuped Tmux object """
     def __init__(self, tid):
         self.tid = tid

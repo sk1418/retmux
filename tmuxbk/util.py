@@ -99,3 +99,7 @@ def all_backups():
 def latest_backup():
     """get latest backup"""
     return max([os.path.join(config.BACKUP_PATH,p) for p in all_backups()], key=os.path.getmtime)
+
+def get_line(s):
+    """get a gui line with given char"""
+    return str(s)*72
