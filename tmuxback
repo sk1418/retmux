@@ -6,7 +6,7 @@ import tmuxbk.controller as controller
 import tmuxbk.config as config
 import tmuxbk.util as util
 import logging
-import tmuxbk.tmux_log as log
+import tmuxbk.log as log
 
 """
 the start point of tmuxback. 

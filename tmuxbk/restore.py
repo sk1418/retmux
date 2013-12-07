@@ -1,18 +1,18 @@
 # -*- coding:utf-8 -*-
 import util
-import tmux_cmd
+import cmd
 import tmux_obj
-import tmux_log
+import log
 import config
 import datetime,time
 import os,sys
 from os import path 
 
 
-LOG = tmux_log.get_logger()
+LOG = log.get_logger()
 
-WIN_BASE_IDX = int(tmux_cmd.get_option('base-index'))
-#PANE_BASE_IDX = tmux_cmd.get_option('pane-base-index')
+WIN_BASE_IDX = int(cmd.get_option('base-index'))
+#PANE_BASE_IDX = cmd.get_option('pane-base-index')
 
 def restore_tmux(tmux_id):
     """
@@ -32,7 +32,7 @@ def restore_tmux(tmux_id):
     for sess in  tmux.sessions:
         LOG.debug('processing session name %s'%sess.name)
         #check if session exists
-        if tmux_cmd.has_tmux_server() and tmux_cmd.has_session(sess.name):
+        if cmd.has_tmux_server() and cmd.has_session(sess.name):
             LOG.info('found session with same name in current tmux, \
 skip restoring the session:%s.' % sess.name)
             continue
@@ -42,13 +42,13 @@ skip restoring the session:%s.' % sess.name)
 def restore_session(sess, tmux_id):
     """create the session from session object"""
     LOG.debug('create session, with initial win: %s' % sess.name)
-    tmux_cmd.create_session(sess.name,sess.size)
+    cmd.create_session(sess.name,sess.size)
     for win in sess.windows_in_reverse()[:-1]:
         #rename, renumber window
         restore_window(win, tmux_id)
 
         LOG.debug('create empty window with baseIdx: %s' % WIN_BASE_IDX)
-        tmux_cmd.create_empty_window(sess.name, WIN_BASE_IDX)
+        cmd.create_empty_window(sess.name, WIN_BASE_IDX)
 
     # the last window
     restore_window(sess.windows_in_reverse()[-1], tmux_id)
@@ -58,33 +58,33 @@ def restore_window(win, tmux_id):
     LOG.info('restoring window: %s' % win.sess_name+':'+str(win.win_id))
     #renumber from base_index to backuped index
     if WIN_BASE_IDX != win.win_id:
-        tmux_cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
+        cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
     #rename win
-    tmux_cmd.rename_window(win.sess_name,win.win_id,win.name)
+    cmd.rename_window(win.sess_name,win.win_id,win.name)
     
     #select window (active)
     if win.active:
-        tmux_cmd.active_window(win.sess_name,win.win_id)
+        cmd.active_window(win.sess_name,win.win_id)
 
     if len(win.panes) >1 :
         #multiple panes
         #split
         for i in range(len(win.panes)-1):
-            tmux_cmd.split_window(win.sess_name,win.win_id,win.min_pane_id())
+            cmd.split_window(win.sess_name,win.win_id,win.min_pane_id())
 
     for p in win.panes:
         restore_pane(p, tmux_id)
 
     #set layout
-    tmux_cmd.select_layout(win.sess_name, win.win_id, win.layout)
+    cmd.select_layout(win.sess_name, win.win_id, win.layout)
 
 def restore_pane(pane, tmux_id):
     LOG.info('restoring pane: %s'% pane.idstr())
     #set path
-    tmux_cmd.set_pane_path(pane.idstr(), pane.path)
+    cmd.set_pane_path(pane.idstr(), pane.path)
 
     #restore content
     filename = os.path.join(config.BACKUP_PATH,tmux_id,pane.idstr())
 
-    tmux_cmd.restore_pane_content(pane.idstr(), filename)
+    cmd.restore_pane_content(pane.idstr(), filename)
 

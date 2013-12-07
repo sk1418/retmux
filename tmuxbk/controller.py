@@ -1,15 +1,15 @@
 # -*- coding:utf-8 -*-
 import util
-import tmux_backup
-import tmux_restore
+import backup
+import restore
 import tmux_obj
 import config
 import datetime,time
-import logging, tmux_log
+import logging, log
 import os,sys
 from os import path 
 
-LOG = tmux_log.get_logger()
+LOG = log.get_logger()
 
 #TODO refactory, move interactive part to a module?
 #extract the list all and print part to a function.
@@ -81,13 +81,13 @@ def backup(name=None):
     """
     name = tmux_id_4_backup(name)
     LOG.debug('backup name:%s'%name)
-    tmux_backup.backup_tmux(name)
+    backup.backup_tmux(name)
 
     
 def restore(name=None):
     """restore sessions from named backup"""
     name = tmux_id_4_restore(name)
-    tmux_restore.restore_tmux(name)
+    restore.restore_tmux(name)
 
 
 def tmux_id_4_backup(tmux_id):

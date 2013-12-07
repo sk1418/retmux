@@ -1,14 +1,14 @@
 # -*- coding:utf-8 -*-
 import util
-import tmux_cmd
+import cmd
 import tmux_obj
-import tmux_log
+import log
 import config
 import os,sys
 from os import path 
 import datetime,time
 
-LOG = tmux_log.get_logger()
+LOG = log.get_logger()
 
 def backup_tmux(tmux_id):
     """get current tmux information and return Tmux object
@@ -29,7 +29,7 @@ def backup_tmux(tmux_id):
     for s in tmux.sessions:
         for w in s.windows:
             for p in w.panes:
-                tmux_cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
+                cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
 
     LOG.info('Backup of sessions are saved under %s'%parent_dir)
 
@@ -37,11 +37,11 @@ def load_sessions():
     """load sessions information """
     LOG.debug('Backup tmux sessions...')
 
-    if not tmux_cmd.has_tmux_server():
+    if not cmd.has_tmux_server():
         LOG.info("No tmux session found, nothing to backup")
         sys.exit(0)
 
-    output = tmux_cmd.get_sessions()
+    output = cmd.get_sessions()
     sess = []
     for s in output:
         #s is like  sessName:(200,300):1
@@ -57,7 +57,7 @@ def load_sessions():
 def load_windows(s_name):
     """load windows for given session name"""
     LOG.debug('Backup windows of session %s'%s_name)
-    output = tmux_cmd.get_windows_from_session(s_name)
+    output = cmd.get_windows_from_session(s_name)
     wins = []
     for s in output:
         #s is like 1:wname:1
@@ -78,7 +78,7 @@ def load_panes(s_name,w_id):
     load panes for given session name and window idx
     """
     LOG.debug('Backup panes of window: %s:%d'%(s_name,w_id))
-    output = tmux_cmd.get_panes_from_sess_win(s_name,w_id)
+    output = cmd.get_panes_from_sess_win(s_name,w_id)
     panes = []
     for s in output:
         #output format: paneIdx:=:width:=:height:=:path:=:active
