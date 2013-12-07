@@ -4,8 +4,9 @@ import re
 import json
 import os
 import config
-import logging, logging.handlers
 import tmux_obj
+import shutil
+
 
 def object2dict(obj):
     #convert object to a dict
@@ -48,6 +49,16 @@ def get_tmux_by_id(tmux_id):
     """
     jsonfile = os.path.join(config.BACKUP_PATH,tmux_id,tmux_id+'.json')
     return json_to_obj(jsonfile)
+
+def delete_backup(tmux_id):
+    """delete backup by tmux_id (backup name) """
+    tmux_dir = os.path.join(config.BACKUP_PATH, tmux_id)
+    try:
+        shutil.rmtree(tmux_dir)
+        return 0
+    except:
+        return 1
+
 
 def exec_cmd(cmd):
     """execute a shell command

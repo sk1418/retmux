@@ -18,10 +18,16 @@ help_info = """
     
     [OPTIONS] 
         -h print help message
+
         -v version
+
         -l [name] 
-               with [name]: list all backups (brief info)
-            without [name]: show detailed backup info of given name
+               with [name]: list detailed backup info of given name
+            without [name]: list session info interactively
+
+        -d [name] 
+               with [name]: delete backup with given name
+            without [name]: delete backup interactively
 
         -b [name] 
                with [name]: backup current tmux sessions with given name. 
@@ -30,6 +36,8 @@ help_info = """
         -r [name] 
                with [name]: restore sessions from named backup. 
             without [name]: restore from latest default backup name.
+
+        -ri restore sessions interactively
     """
 
 
@@ -42,9 +50,11 @@ def version():
     print config.VERSION
 
 actions = {
-    '-l'  : controller.show_info,
-    '-b'  : controller.backup, 
-    '-r'  : controller.restore,
+    '-l'  : controller.show_and_action,
+    '-b'  : controller.do_backup, 
+    '-d'  : controller.do_delete,
+    '-r'  : controller.do_restore,
+    '-ri'  : controller.interactive_restore,
     '-h'  : usage,
     '-v'  : version
 }
@@ -66,7 +76,7 @@ if __name__ == '__main__':
         func = actions.get(sys.argv[1])
 
         #backup or restore
-        if sys.argv[1] in ('-b','-r','-l') \
+        if sys.argv[1] in ('-b','-r','-l', '-d') \
                 and sys.argv.__len__() == 3 :
             func(sys.argv[2]) 
         else:
