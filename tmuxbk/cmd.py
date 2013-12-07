@@ -15,6 +15,8 @@ CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pan
 
 CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
 
+CMD_KILL_SESSION='tmux kill-session -t%s'
+
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
 CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
 CMD_SHOW_OPTION='tmux show-options -gv %s'
@@ -129,6 +131,11 @@ def get_option(option):
 def has_session(sess_name):
     """check if a session exists already"""
     cmd = (CMD_HAS_SESSION%sess_name).split(' ')
+    return util.cmd_return_code(cmd) == 0
+
+def kill_session(sess_name):
+    """kill a session, used for deleting dummy session"""
+    cmd = (CMD_KILL_SESSION%sess_name).split(' ')
     return util.cmd_return_code(cmd) == 0
 
 def restore_pane_content(pane_idstr,filename):

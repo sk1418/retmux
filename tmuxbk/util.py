@@ -6,6 +6,7 @@ import os
 import config
 import tmux_obj
 import shutil
+import random, string
 
 
 def object2dict(obj):
@@ -102,6 +103,8 @@ def json_to_obj(jsonfile):
         tmux = json.load(f, object_hook=dict2object)
     return tmux
 
+def random_str(length):
+    return ''.join(random.choice(string.lowercase) for i in range(length))
 
 def all_backups():
     """get all saved tmux backups"""

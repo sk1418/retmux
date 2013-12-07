@@ -11,8 +11,26 @@ from os import path
 
 LOG = log.get_logger()
 
-WIN_BASE_IDX = int(cmd.get_option('base-index'))
+WIN_BASE_IDX = None
+
+#in case there is no tmux session, create a new dummy session, need to be removed at the end
+DUMMY_SESSION = None 
+
 #PANE_BASE_IDX = cmd.get_option('pane-base-index')
+
+def win_base_idx():
+    global WIN_BASE_IDX
+    if WIN_BASE_IDX == None:
+        if not cmd.has_tmux_server():
+            global DUMMY_SESSION
+            DUMMY_SESSION = util.random_str(10)
+            LOG.debug('Create Dummy session:%s'%DUMMY_SESSION)
+            cmd.create_session(DUMMY_SESSION, '[10,10]')
+        WIN_BASE_IDX = int(cmd.get_option('base-index'))
+    return WIN_BASE_IDX
+
+
+
 
 def restore_tmux(tmux_id):
     """
@@ -38,6 +56,10 @@ skip restoring the session:%s.' % sess.name)
             continue
         restore_session(sess, tmux_id)
 
+    LOG.debug('check and kill dummy session')
+    if DUMMY_SESSION:
+        cmd.kill_session(DUMMY_SESSION)
+    LOG.info('restored backup %s'% tmux_id)
 
 def restore_session(sess, tmux_id):
     """create the session from session object"""
@@ -47,8 +69,8 @@ def restore_session(sess, tmux_id):
         #rename, renumber window
         restore_window(win, tmux_id)
 
-        LOG.debug('create empty window with baseIdx: %s' % WIN_BASE_IDX)
-        cmd.create_empty_window(sess.name, WIN_BASE_IDX)
+        LOG.debug('create empty window with baseIdx: %s' % win_base_idx())
+        cmd.create_empty_window(sess.name, win_base_idx())
 
     # the last window
     restore_window(sess.windows_in_reverse()[-1], tmux_id)
@@ -57,8 +79,8 @@ def restore_session(sess, tmux_id):
 def restore_window(win, tmux_id):
     LOG.info('restoring window: %s' % win.sess_name+':'+str(win.win_id))
     #renumber from base_index to backuped index
-    if WIN_BASE_IDX != win.win_id:
-        cmd.renumber_window(win.sess_name, WIN_BASE_IDX, win.win_id)
+    if win_base_idx() != win.win_id:
+        cmd.renumber_window(win.sess_name, win_base_idx(), win.win_id)
     #rename win
     cmd.rename_window(win.sess_name,win.win_id,win.name)
     
