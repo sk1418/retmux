@@ -11,8 +11,44 @@ from os import path
 
 LOG = log.get_logger()
 
-#TODO refactory, move interactive part to a module?
-#extract the list all and print part to a function.
+
+tmux_dict = {}
+
+def list_all_sessions():
+    """print a list of all backuped sessions (with short info)"""
+    if not len(tmux_dict.keys()):
+        #name is empty, show all list(short info)
+        l = util.all_backups()
+        if not l or len(l) == 0:
+            LOG.info( "No backup was created yet.\ntmuxback -b [name] to create backup" )
+
+        last = util.latest_backup().split('/')[-1]
+        latest_tmux = util.get_tmux_by_id(last)
+        #add into dict
+        i=1
+        tmux_dict[str(i)]=latest_tmux
+
+        bk_list = [ b for b in l if b != last]
+        for tmux_id in bk_list:
+            tmux = util.get_tmux_by_id(tmux_id)
+            i+=1
+            tmux_dict[str(i)]=tmux
+
+    list_fmt = '%s%2s %s'#fmt for list all, the first %s is the '*' place
+    LOG.info(util.get_line('='))
+    #header
+    LOG.info( list_fmt %(' ', 'Id',tmux_obj.Tmux.short_format%('Name','Sessions','Create on')))
+    LOG.info(util.get_line('='))
+    keys = tmux_dict.keys()
+    keys.sort()
+    for idx in keys:
+        tmux = tmux_dict[idx]
+        latest_flag = '*' if idx == '1' else ' '
+        LOG.info(list_fmt%(latest_flag, idx, tmux.short_info()))
+    LOG.info(util.get_line('-'))
+    LOG.info('%72s'%'Latest default backup with (*)')
+        
+
 def show_info(name=None):
     """list backups info. if name was given, show detailed info for given
         backup item. otherwise show short_info for all backups as list"""
@@ -21,52 +57,24 @@ def show_info(name=None):
     name = tmux_id_4_show(name)
     
     if not name:
-        #name is empty, show all list(short info)
-        l = util.all_backups()
-        if not l or len(l) == 0:
-            LOG.info( "No backup was created yet.\ntmuxback -b [name] to create backup" )
-        else:
-            list_fmt = '%s%2s %s'#fmt for list all, the first %s is the '*' place
-            tmux_dict = {}
-            i = 0
+        #interactively show details
+        while 1:
+            list_all_sessions()
+            idx = raw_input("tmuxback> Show details of Id (press q to exit):")
 
-            LOG.info(util.get_line('='))
-            LOG.info( list_fmt %(' ', 'Id',tmux_obj.Tmux.short_format%('Name','Sessions','Create on')))
-            LOG.info(util.get_line('='))
-            last = util.latest_backup().split('/')[-1]
-            latest_tmux = util.get_tmux_by_id(last)
-            #add into dict
-            i+=1
-            tmux_dict[str(i)]=latest_tmux
-
-            bk_list = [ b for b in l if b != last]
-
-            LOG.info(list_fmt%('*',str(i),latest_tmux.short_info()))
-
-            for tmux_id in bk_list:
-                tmux = util.get_tmux_by_id(tmux_id)
-                i+=1
-                tmux_dict[str(i)]=tmux
-                LOG.info(list_fmt%(' ',str(i),tmux.short_info()))
-            LOG.info(util.get_line('-'))
-            LOG.info('%72s'%'Latest default backup with (*)')
-            #interactively show details
-            while 1:
-                idx = raw_input("tmuxback> Show details of Id (press q to exit):")
-
-                if not idx:
-                    LOG.error("invalid index: (empty)")
-                elif idx.lower() == 'q':
-                    break
-                elif not tmux_dict.has_key(idx):
-                    LOG.error("invalid index:" + idx)
-                else:
-                    tmux = tmux_dict[idx]
-                    LOG.info('\nDetails of backup:%s'% tmux.tid)
-                    LOG.info(util.get_line('-'))
-                    LOG.info('\n'.join(tmux.long_info()))
-                    break
-
+            if not idx:
+                LOG.error("invalid index: (empty)")
+            elif idx.lower() == 'q':
+                break
+            elif not tmux_dict.has_key(idx):
+                LOG.error("invalid index:" + idx)
+            else:
+                tmux = tmux_dict[idx]
+                LOG.info(util.get_line('>'))
+                LOG.info('\nDetails of backup:%s'% tmux.tid)
+                LOG.info(util.get_line('>'))
+                LOG.info('\n'.join(tmux.long_info()))
+                LOG.info(util.get_line('<'))
     else:
         #till here, the name should be validated, exists
         LOG.info('\nDetails of backup:%s'% name)
