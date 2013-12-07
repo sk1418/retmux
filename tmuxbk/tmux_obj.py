@@ -12,13 +12,29 @@ class Tmux(object):
     def short_info(self):
         """ short info of this tmux object"""
         p = (self.tid, 
-               ', '.join([s.name for s in self.sessions]),
-               self.create_time)
+             ', '.join([s.name for s in self.sessions]),
+             self.create_time)
         return Tmux.short_format % p
 
     def long_info(self):
         """ longer info of this tmux object"""
-        pass
+        info = []
+        sess_fmt = ' Session: [%s] (%d windows):'
+        win_fmt  = '  |_ Window %d. [%s] (%d panes):'
+        pane_fmt = '      |_ Pane %d. %s'
+        info.append("%72s" % ('Backup was created on ' + self.create_time))
+        for s in self.sessions:
+           info.append(sess_fmt % (s.name, len(s.windows)))
+           for w in s.windows:
+               info.append(win_fmt%(w.win_id, w.name, len(w.panes)))
+               for p in w.panes:
+                   info.append(pane_fmt%(p.pane_id, p.path))
+
+        return info
+
+
+        
+
 class Session(object):
     def __init__(self,name):
         self.name = name

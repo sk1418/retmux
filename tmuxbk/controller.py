@@ -11,28 +11,37 @@ from os import path
 
 LOG = tmux_log.get_logger()
 
-def list_all():
-    """list all backups"""
-#TODO the current impl. is rather simple, just list the backup names. 
-#     It would be nice to list backups with some tmux session info.
-#     tmux object might need to be changed by adding some fields
-#     backup/writing to json module needs to be changed too.
-    l = util.all_backups()
-    if not l or len(l) == 0:
-        LOG.info( "No backup was created yet.\ntmuxback -b [name] to create backup" )
+def show_info(name=None):
+    """list backups info. if name was given, show detailed info for given
+        backup item. otherwise show short_info for all backups as list"""
+
+    #using restore check function to validate the given name
+    name = tmux_id_4_show(name)
+    
+    if not name:
+        #name is empty, show all list(short info)
+        l = util.all_backups()
+        if not l or len(l) == 0:
+            LOG.info( "No backup was created yet.\ntmuxback -b [name] to create backup" )
+        else:
+
+            LOG.info( tmux_obj.Tmux.short_format%('name(*:latest)','sessions','create'))
+            LOG.info( '-'*72)
+            last = util.latest_backup().split('/')[-1]
+            bk_list = [ b for b in l if b != last]
+
+            latest_tmux = util.get_tmux_by_id(last)
+            LOG.info( latest_tmux.short_info().replace(' ','*',1))
+
+            for tmux_id in bk_list:
+                tmux = util.get_tmux_by_id(tmux_id)
+                LOG.info( tmux.short_info())
     else:
-
-        LOG.info( tmux_obj.Tmux.short_format%('name(*:latest)','sessions','create'))
+        #till here, the name should be validated, exists
+        LOG.info('\nDetails of backup:%s'% name)
         LOG.info( '-'*72)
-        last = util.latest_backup().split('/')[-1]
-        bk_list = [ b for b in l if b != last]
-
-        latest_tmux = util.get_tmux_by_id(last)
-        LOG.info( latest_tmux.short_info().replace(' ','*',1))
-
-        for tmux_id in bk_list:
-            tmux = util.get_tmux_by_id(tmux_id)
-            LOG.info( tmux.short_info())
+        tmux = util.get_tmux_by_id(name)
+        LOG.info('\n'.join(tmux.long_info()))
        
 def backup(name=None):
     """backup current tmux sessions with given name
@@ -82,3 +91,18 @@ def tmux_id_4_restore(tmux_id):
         LOG.info('backup name is empty, using last backup:%s'%tmux_id)
 
     return tmux_id
+
+def tmux_id_4_show(tmux_id):
+    """check the tmux_id (backup name) for show info (-l)
+    """
+    #if no backup exists, exit application
+    all_bk =util.all_backups() 
+
+    #checking tmux_id
+    if tmux_id:
+        if not all_bk.__contains__(tmux_id):
+            LOG.error('cannot find given backup name:%s'% tmux_id)
+            sys.exit(1)
+
+    return tmux_id
+

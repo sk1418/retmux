@@ -18,12 +18,18 @@ help_info = """
     
     [OPTIONS] 
         -h print help message
-        -l list all backups
         -v version
-        -b [name] backup current tmux sessions with given name. if 
-                  name is empty, using default name.(timestamp)
-        -r [name] restore sessions from named backup. If name is empty, 
-                  restore from latest default backup name.
+        -l [name] 
+               with [name]: list all backups (brief info)
+            without [name]: show detailed backup info of given name
+
+        -b [name] 
+               with [name]: backup current tmux sessions with given name. 
+            without [name]: if name is empty, using default name.(timestamp)
+
+        -r [name] 
+               with [name]: restore sessions from named backup. 
+            without [name]: restore from latest default backup name.
     """
 
 
@@ -36,7 +42,7 @@ def version():
     print config.VERSION
 
 actions = {
-    '-l'  : controller.list_all,
+    '-l'  : controller.show_info,
     '-b'  : controller.backup, 
     '-r'  : controller.restore,
     '-h'  : usage,
@@ -60,7 +66,7 @@ if __name__ == '__main__':
         func = actions.get(sys.argv[1])
 
         #backup or restore
-        if sys.argv[1] in ('-b','-r') \
+        if sys.argv[1] in ('-b','-r','-l') \
                 and sys.argv.__len__() == 3 :
             func(sys.argv[2]) 
         else:

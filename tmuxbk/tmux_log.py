@@ -46,7 +46,7 @@ def setup_log(console_lvl, file_lvl):
     # create file handler which logs even debug messages
     fh = logging.handlers.RotatingFileHandler(\
             os.path.join(config.USER_PATH,'tmuxback.log'), \
-           maxBytes=500, backupCount=5 )
+           maxBytes=5000000, backupCount=5 )
     fh.setLevel(file_lvl)
 
     # create console handler with a higher log level
