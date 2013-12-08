@@ -13,15 +13,10 @@ SAMPLE_CONF = path.join(APP_PATH, 'sample','default.conf')
 BACKUP_PATH = path.join(USER_PATH, "backup")
 CONF_FILE   = path.join(USER_PATH, "tmuxback.conf")
 
-def update_config(section, key, value):
-    """ update the given config option"""
-    cf = ConfigParser.ConfigParser()
-    with open( CONF_FILE, 'r') as cfgf:
-        cf.readfp(cfgf)
-    cf.set(section, key, value)
-    with open(CONF_FILE, 'w') as cfgf:
-        cf.write(cfgf)
-
+######user config####
+WITH_CNT = None
+LOG_LVL_FILE = None
+LOG_LVL_CONSOLE = None
 
 
 def load_config():
@@ -33,7 +28,7 @@ def load_config():
     
     # if conf file doesn't exist, cp default conf there
     if not path.exists(CONF_FILE):
-        __init_config()
+        init_config()
 
     cf.read(CONF_FILE);
 
@@ -41,10 +36,10 @@ def load_config():
     #TODO
     return True;
 
-def __init_config():
+def init_config():
     """
     create .tmuxback under home
     """
     #mkdir and copy files
     os.makedirs(BACKUP_PATH)
-    shutil.copy(SAMPLE_CONF,USER_PATH)
+    shutil.copy(SAMPLE_CONF,CONF_FILE)
