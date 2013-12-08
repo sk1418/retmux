@@ -19,6 +19,9 @@ DUMMY_SESSION = None
 #PANE_BASE_IDX = cmd.get_option('pane-base-index')
 
 def win_base_idx():
+    """get the tmux's win-base-idx option, if no server was started, create a 
+    dummy session, the session needs to be removed after restoring"""
+
     global WIN_BASE_IDX
     if WIN_BASE_IDX == None:
         if not cmd.has_tmux_server():
@@ -28,8 +31,6 @@ def win_base_idx():
             cmd.create_session(DUMMY_SESSION, '[10,10]')
         WIN_BASE_IDX = int(cmd.get_option('base-index'))
     return WIN_BASE_IDX
-
-
 
 
 def restore_tmux(tmux_id):
@@ -59,7 +60,7 @@ skip restoring the session:%s.' % sess.name)
     LOG.debug('check and kill dummy session')
     if DUMMY_SESSION:
         cmd.kill_session(DUMMY_SESSION)
-    LOG.info('restored backup %s'% tmux_id)
+    LOG.info('Backup %s is restored! run "tmux list-sessions" to see sessions and attach'% tmux_id)
 
 def restore_session(sess, tmux_id):
     """create the session from session object"""
