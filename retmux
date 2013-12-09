@@ -60,13 +60,14 @@ actions = {
     '-v'  : version
 }
 
+
 if __name__ == '__main__':
 
     #load config
-    config.load_config()
+    if not config.load_config():
+        print
     
-    #FIXME the log level should be read from config
-    log.setup_log(logging.DEBUG, logging.DEBUG)
+    log.setup_log(config.LOG_LVL_CONSOLE, config.LOG_LVL_FILE)
 
     #process user input options
     if sys.argv.__len__() <2 or not sys.argv[1]:

@@ -31,7 +31,7 @@ def backup_tmux(tmux_id):
             for p in w.panes:
                 cmd.capture_pane(p.idstr(), path.join(parent_dir,p.idstr()))
 
-    LOG.info('Backup of sessions are saved under %s'%parent_dir)
+    LOG.info('Backup of sessions was saved under %s'%parent_dir)
 
 def load_sessions():
     """load sessions information """

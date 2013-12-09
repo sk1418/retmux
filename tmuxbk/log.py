@@ -3,6 +3,11 @@ import logging, logging.handlers
 import os
 import config
 
+LVL_DICT={
+        'debug' : logging.DEBUG,
+        'info'  : logging.INFO,
+        'error' : logging.ERROR
+        }
 class TmuxbackFormatter(logging.Formatter):
     """define different format for different log levels"""
 
@@ -38,14 +43,17 @@ class TmuxbackFormatter(logging.Formatter):
 
         return result
 
-def setup_log(console_lvl, file_lvl):
+def setup_log(c_lvl_str, f_lvl_str):
     """setup_log, this function should be called only once at the beginning of application starts"""
-    logger = logging.getLogger('tmuxbackLogger')
+    file_lvl = LVL_DICT[f_lvl_str.lower()]
+    console_lvl = LVL_DICT[c_lvl_str.lower()]
+
+    logger = logging.getLogger('retmuxLogger')
     logger.setLevel(file_lvl)
 
     # create file handler which logs even debug messages
     fh = logging.handlers.RotatingFileHandler( \
-            os.path.join(config.USER_PATH,'tmuxback.log'), \
+            os.path.join(config.USER_PATH,'retmux.log'), \
            maxBytes=5000000, backupCount=5 )
     fh.setLevel(file_lvl)
 
@@ -67,4 +75,4 @@ def setup_log(console_lvl, file_lvl):
     logger.debug("Log system setup successfully")
 
 def get_logger():
-    return logging.getLogger('tmuxbackLogger')
+    return logging.getLogger('retmuxLogger')
