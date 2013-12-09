@@ -101,6 +101,15 @@ LAST_NODE   = u'└'
 SPACE       = u' '*8
 
 def tree_struc(text,islast_list,lvl,place_holder=False):
+    """
+    recursively build the tree structure for tmux objects.
+    
+    para:
+    text : the object info text
+    islast_list: a list of boolean, if the node is last node on each level 
+    lvl: level
+    place_holder: default False. The current node would be handled as place holder or normal node line.
+    """
     if lvl > 0:
         lvl -= 1
         if islast_list[lvl]:

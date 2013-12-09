@@ -21,23 +21,24 @@ help_info = """
 
         -v version
 
-        -l [name] 
-               with [name]: list detailed backup info of given name
-            without [name]: list session info interactively
+        -l [name] : list backup info
+               with [name]: show detailed backup info by name
+            without [name]: show brief and detailed info interactively
 
-        -d [name] 
-               with [name]: delete backup with given name
-            without [name]: delete backup interactively
+        -d [name] : delete a backup
+               with [name]: delete by given name
+            without [name]: delete interactively
 
-        -b [name] 
-               with [name]: backup current tmux sessions with given name. 
-            without [name]: if name is empty, using default name.(timestamp)
+        -b [name] : backup current tmux sessions
+               with [name]: name the backup with given name
+            without [name]: name the backup with default name(timestamp)
 
-        -r [name] 
-               with [name]: restore sessions from named backup. 
-            without [name]: restore from latest default backup name.
+        -r [name] : restore tmux sessions from backup
+               with [name]: restore sessions by backup name
+            without [name]: restore from the latest backup
 
-        -ri restore sessions interactively
+        -ri       : restore sessions interactively
+
     """
 
 
@@ -60,14 +61,13 @@ actions = {
 }
 
 if __name__ == '__main__':
-    #check if config file init is required
-    #TODO
 
     #load config
-    #TODO 
+    config.load_config()
     
     #FIXME the log level should be read from config
     log.setup_log(logging.DEBUG, logging.DEBUG)
+
     #process user input options
     if sys.argv.__len__() <2 or not sys.argv[1]:
         usage()

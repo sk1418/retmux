@@ -20,7 +20,7 @@ def list_all_sessions():
         #name is empty, show all list(short info)
         l = util.all_backups()
         if not l or len(l) == 0:
-            print  "No backup was created yet.\ntmuxback -b [name] to create backup" 
+            print  "No backup was created yet.\nretmux -b [name] to create backup" 
             sys.exit()
 
         last = util.latest_backup().split('/')[-1]

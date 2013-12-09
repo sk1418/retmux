@@ -9,7 +9,7 @@ VERSION     = '1.0.0'                #software version
 SEP         = ':=:'
 APP_PATH    = path.join(path.dirname(__file__),"../")
 USER_PATH   = path.join(os.getenv("HOME") , ".retmux")
-SAMPLE_CONF = path.join(APP_PATH, 'sample','default.conf')
+SAMPLE_CONF = path.join(APP_PATH, 'conf','default.conf')
 BACKUP_PATH = path.join(USER_PATH, "backup")
 CONF_FILE   = path.join(USER_PATH, "retmux.conf")
 
@@ -38,7 +38,7 @@ def load_config():
 
 def init_config():
     """
-    create .tmuxback under home
+    create .retmux under home
     """
     #mkdir and copy files
     os.makedirs(BACKUP_PATH)
