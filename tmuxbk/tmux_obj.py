@@ -19,16 +19,33 @@ class Tmux(object):
     def long_info(self):
         """ longer info of this tmux object"""
         info = []
-        sess_fmt = ' Session: [%s] (%d windows):'
-        win_fmt  = '  |_ Window %d. [%s] (%d panes):'
-        pane_fmt = '      |_ Pane %d. %s'
+
+        backup_fmt = u' Backup─┬─[%s] (%d sessions):'
+        sess_fmt   = u'%s─Session─┬─[%s] (%d windows):'
+        win_fmt    = u'%s─Window─┬─(%d) [%s] (%d panes):'
+        pane_fmt   = u'%s─Pane─(%d) %s'
         info.append("%72s" % ('Backup was created on ' + self.create_time))
+
+        info.append(backup_fmt %(self.tid, len(self.sessions)))
+        
+        last_s = self.sessions[-1]
         for s in self.sessions:
-           info.append(sess_fmt % (s.name, len(s.windows)))
-           for w in s.windows:
-               info.append(win_fmt%(w.win_id, w.name, len(w.panes)))
-               for p in w.panes:
-                   info.append(pane_fmt%(p.pane_id, p.path))
+            is_last_s = s.name == last_s.name
+            info.append(sess_fmt % (tree_str(s,is_last_s,False,False),
+                                    s.name, 
+                                    len(s.windows)))
+            last_w = s.windows[-1]
+            for w in s.windows:
+                is_last_w = w.win_id == last_w.win_id
+                info.append( win_fmt % (tree_str(w, is_last_s, is_last_w, False),
+                                        w.win_id, w.name, 
+                                        len(w.panes)))
+                last_p = w.panes[-1]
+                for p in w.panes:
+                    is_last_p = last_p.pane_id == p.pane_id
+                    info.append( pane_fmt%(tree_str(p,is_last_s, is_last_w, is_last_p),
+                                            p.pane_id,
+                                            p.path))
 
         return info
 
@@ -82,3 +99,31 @@ class Pane(object):
     def idstr(self):
         return self.sess_name+':'+str(self.win_id)+'.'+str(self.pane_id)
         
+def tree_str(node,last_session,last_win,last_pane):
+    """build the tree structure lines"""
+    space = ' '*8
+    result = space
+
+    pipe = u'│'
+
+    #normal char
+    nch = u'├'
+
+    #last char
+    lch   = u'└'
+
+
+    if isinstance(node,Session):
+        result += lch if last_session else nch
+    elif isinstance(node, Window):
+        result += ' ' if last_session else pipe
+        result += space + ' ' # because len('session')-len('window')=1
+        result += lch if last_win else nch
+    elif isinstance(node, Pane):
+        result += ' ' if last_session else pipe
+        result += space + ' ' # because len('session')-len('window')=1
+        result += ' ' if last_win else pipe
+        result += space
+        result += lch if last_pane else nch
+
+    return result
