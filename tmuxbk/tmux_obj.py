@@ -21,9 +21,9 @@ class Tmux(object):
         info = []
 
         backup_fmt = u' Backup─┬─[%s] (%d sessions):'
-        sess_fmt   = u'%s─Session─┬─[%s] (%d windows):'
-        win_fmt    = u'%s─Window─┬─(%d) [%s] (%d panes):'
-        pane_fmt   = u'%s─Pane─(%d) %s'
+        sess_fmt   = u'─Session─┬─[%s] (%d windows):'
+        win_fmt    = u'─Window─┬─(%d) [%s] (%d panes):'
+        pane_fmt   = u'─Pane (%d) %s'
         info.append("%72s" % ('Backup was created on ' + self.create_time))
 
         info.append(backup_fmt %(self.tid, len(self.sessions)))
@@ -31,26 +31,19 @@ class Tmux(object):
         last_s = self.sessions[-1]
         for s in self.sessions:
             is_last_s = s.name == last_s.name
-            info.append(sess_fmt % (tree_str(s,is_last_s,False,False),
-                                    s.name, 
-                                    len(s.windows)))
+            s_info = sess_fmt % ( s.name, len(s.windows))
+            info.append( tree_struc(s_info, [is_last_s],lvl=1))
             last_w = s.windows[-1]
             for w in s.windows:
                 is_last_w = w.win_id == last_w.win_id
-                info.append( win_fmt % (tree_str(w, is_last_s, is_last_w, False),
-                                        w.win_id, w.name, 
-                                        len(w.panes)))
+                w_info = win_fmt % (w.win_id, w.name, len(w.panes))
+                info.append(tree_struc(w_info, [is_last_s,is_last_w],lvl=2))
                 last_p = w.panes[-1]
                 for p in w.panes:
+                    p_info = pane_fmt%( p.pane_id, p.path)
                     is_last_p = last_p.pane_id == p.pane_id
-                    info.append( pane_fmt%(tree_str(p,is_last_s, is_last_w, is_last_p),
-                                            p.pane_id,
-                                            p.path))
-
+                    info.append(tree_struc(p_info, [is_last_s,is_last_w,is_last_p],lvl=3))
         return info
-
-
-        
 
 class Session(object):
     def __init__(self,name):
@@ -99,31 +92,25 @@ class Pane(object):
     def idstr(self):
         return self.sess_name+':'+str(self.win_id)+'.'+str(self.pane_id)
         
-def tree_str(node,last_session,last_win,last_pane):
-    """build the tree structure lines"""
-    space = ' '*8
-    result = space
 
-    pipe = u'│'
+#constants for the node tree
+PIPE        = u'│'
+NORMAL_NODE = u'├'
+LAST_NODE   = u'└'
 
-    #normal char
-    nch = u'├'
+SPACE       = u' '*8
 
-    #last char
-    lch   = u'└'
+def tree_struc(text,islast_list,lvl,place_holder=False):
+    if lvl > 0:
+        lvl -= 1
+        if islast_list[lvl]:
+            text = SPACE + (' ' if place_holder else LAST_NODE )+  text
+        else:
+            text = SPACE + (PIPE if place_holder else NORMAL_NODE )+ text
+        #here add one space for alignment. because len('session')-len('window')=1
+        if lvl ==1 :
+            text =' ' +  text 
+        return tree_struc(text,islast_list,lvl,True)
+    return  text
+    
 
-
-    if isinstance(node,Session):
-        result += lch if last_session else nch
-    elif isinstance(node, Window):
-        result += ' ' if last_session else pipe
-        result += space + ' ' # because len('session')-len('window')=1
-        result += lch if last_win else nch
-    elif isinstance(node, Pane):
-        result += ' ' if last_session else pipe
-        result += space + ' ' # because len('session')-len('window')=1
-        result += ' ' if last_win else pipe
-        result += space
-        result += lch if last_pane else nch
-
-    return result
