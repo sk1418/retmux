@@ -3,37 +3,38 @@ import subprocess
 import re
 import util
 import log
+import config
 
 LOG = log.get_logger()
 
 #tmux commands
 
 #list sessions
-CMD_LIST_SESSIONS='tmux list-sessions -F#S:=:(#{session_width},#{session_height}):=:#{session_attached}'
+CMD_LIST_SESSIONS    = 'tmux list-sessions -F#S:=:(#{session_width},#{session_height}):=:#{session_attached}'
 #tmux list-panes -t {session}:{windowIdx}
-CMD_LIST_PANES = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'
+CMD_LIST_PANES       = 'tmux list-panes -t%s:%s -F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'
 
-CMD_CREATE_SESSION='tmux new-session -d -s%s -x%d -y%d'
+CMD_CREATE_SESSION   = 'tmux new-session -d -s%s -x%d -y%d'
 
-CMD_KILL_SESSION='tmux kill-session -t%s'
+CMD_KILL_SESSION     = 'tmux kill-session -t%s'
 
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
-CMD_CAPTURE_PANE='tmux capture-pane -ep -t%s'
-CMD_SHOW_OPTION='tmux show-options -gv %s'
-CMD_HAS_SESSION='tmux has-session -t%s'
-CMD_SET_PANE_PATH='tmux send-keys -t%s cd \"%s\"\nclear\n'
+CMD_CAPTURE_PANE     = 'tmux capture-pane -%sp -t%s'
+CMD_SHOW_OPTION      = 'tmux show-options -gv %s'
+CMD_HAS_SESSION      = 'tmux has-session -t%s'
+CMD_SET_PANE_PATH    = 'tmux send-keys -t%s cd \"%s\"\nclear\n'
 
-CMD_LIST_WINDOWS='tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
-CMD_MOVE_WINDOW='tmux move-window -s%s -t%s'
-CMD_RENAME_WINDOW='tmux rename-window -t%s:%d %s'
-CMD_NEW_EMPTY_WINDOW='tmux new-window -d -t%s:%d'
-CMD_ACTIVE_WINDOW = 'tmux select-window -t%s:%d'
-CMD_SPLIT_WINDOW = 'tmux split-window -d -t%s:%d.%d'
-CMD_SET_LAYOUT = 'tmux select-layout -t%s:%d %s'
-CMD_LOAD_CONTENT = 'tmux send-keys -t%s cat %s\n'
+CMD_LIST_WINDOWS     = 'tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
+CMD_MOVE_WINDOW      = 'tmux move-window -s%s -t%s'
+CMD_RENAME_WINDOW    = 'tmux rename-window -t%s:%d %s'
+CMD_NEW_EMPTY_WINDOW = 'tmux new-window -d -t%s:%d'
+CMD_ACTIVE_WINDOW    = 'tmux select-window -t%s:%d'
+CMD_SPLIT_WINDOW     = 'tmux split-window -d -t%s:%d.%d'
+CMD_SET_LAYOUT       = 'tmux select-layout -t%s:%d %s'
+CMD_LOAD_CONTENT     = 'tmux send-keys -t%s cat %s\n'
 
 def has_tmux_server():
-    cmd = CMD_LIST_SESSIONS.split(' ')
+    cmd  = CMD_LIST_SESSIONS.split(' ')
     code = util.cmd_return_code(cmd)
     return code == 0
 
@@ -77,7 +78,9 @@ def capture_pane(pane_idstr,filename):
     capture pane content and save in given filename.
     the format of pane_idstr is: sessionName:winIdx.paneIdx
     """
-    cmd = (CMD_CAPTURE_PANE % pane_idstr).split(' ')
+    #read the config to decide if backup the ansi escapes
+    p = ('e' if config.CNT_WITH_ESC else '', pane_idstr)
+    cmd = (CMD_CAPTURE_PANE % p).split(' ')
     util.exec_cmd_redir(cmd, filename)
 
 def create_session(sess_name,size):
