@@ -12,7 +12,15 @@ import tmuxbk.log as log
 the start point of tmuxback. 
 """
 
-help_info = """retmux is tool to backup and restore tmux sessions.
+help_info = """ %(cyan)s
+                  __
+       ________  / /_____ ___  __  ___  __
+      / ___/ _ \/ __/ __ `__ \/ / / / |/_/
+     / /  /  __/ /_/ / / / / / /_/ />  <  
+    /_/   \___/\__/_/ /_/ /_/\__,_/_/|_|
+
+            - A tmux backup/reload tool %(clear)s
+
     [%(uline)sUSAGE%(clear)s] 
         retmux [OPTIONS] 
     [%(uline)sOPTIONS%(clear)s] 
