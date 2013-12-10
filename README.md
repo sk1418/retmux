@@ -1,4 +1,18 @@
-this would be the readme file....
+**retmux** README file
 
+	   ________  / /_____ ___  __  ___  __
+	  / ___/ _ \/ __/ __ `__ \/ / / / |/_/
+	 / /  /  __/ /_/ / / / / / /_/ />  <  
+	/_/   \___/\__/_/ /_/ /_/\__,_/_/|_|
 
-content is coming soon.....
+				- a tmux backup/reload tool
+
+##Introduction
+
+##Features
+
+##Installation
+
+##Usage
+
+##Screenshots
