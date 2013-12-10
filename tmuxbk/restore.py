@@ -52,7 +52,7 @@ def restore_tmux(tmux_id):
         LOG.debug('processing session name %s'%sess.name)
         #check if session exists
         if cmd.has_tmux_server() and cmd.has_session(sess.name):
-            LOG.info('found session with same name in current tmux, \
+            LOG.warning('found session with same name in current tmux, \
 skip restoring the session:%s.' % sess.name)
             continue
         restore_session(sess, tmux_id)

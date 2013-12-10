@@ -6,7 +6,8 @@ import config
 LVL_DICT={
         'debug' : logging.DEBUG,
         'info'  : logging.INFO,
-        'error' : logging.ERROR
+        'error' : logging.ERROR,
+        'warn' : logging.WARNING
         }
 
 #style dict
@@ -15,6 +16,7 @@ STYLE={
 'clear' : '\033[0m',
 'uline' : '\033[4m', # Underline Texth
 'error' : '\033[31;5m', #blink, bold, red
+'red'   : '\033[31;1m', # bold, red
 'warning' : '\033[33;1m', #blink, bold, yellow
 }
 
@@ -39,6 +41,7 @@ class TmuxbackFormatter(logging.Formatter):
     err_fmt  = hl('ERROR: ','error') +"%(msg)s"
     dbg_fmt  = "DEBUG: %(module)s: %(lineno)d: %(msg)s"
     info_fmt = "%(msg)s"
+    warning_fmt = hl('WARNING: ','warning') + "%(msg)s"
 
     def __init__(self, fmt="%(levelno)s: %(msg)s"):
         logging.Formatter.__init__(self, fmt)
@@ -53,12 +56,12 @@ class TmuxbackFormatter(logging.Formatter):
         # Replace the original format with one customized by logging level
         if record.levelno == logging.DEBUG:
             self._fmt = TmuxbackFormatter.dbg_fmt
-
         elif record.levelno == logging.INFO:
             self._fmt = TmuxbackFormatter.info_fmt
-
         elif record.levelno == logging.ERROR:
             self._fmt = TmuxbackFormatter.err_fmt
+        elif record.levelno == logging.WARNING:
+            self._fmt = TmuxbackFormatter.warning_fmt
 
         # Call the original formatter class to do the grunt work
         result = logging.Formatter.format(self, record)

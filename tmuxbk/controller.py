@@ -99,7 +99,7 @@ def do_delete(name=None):
      
 def action_delete(tmux):
     if tmux and  isinstance(tmux, tmux_obj.Tmux):
-        confirm = raw_input("tmuxback> Delete backup "+tmux.tid+"? [yes|no] ")
+        confirm = raw_input("retmux> " + log.hl('Delete','red') + " backup "+tmux.tid+"? [yes|no] ")
         if confirm.lower() == "yes":
             if util.delete_backup(tmux.tid) == 0:
                 global tmux_dict
@@ -127,7 +127,7 @@ def interactive_restore():
 
 def action_restore(tmux):
     if tmux and  isinstance(tmux, tmux_obj.Tmux):
-        confirm = raw_input("tmuxback> restore "+tmux.tid+"? [yes|no] ")
+        confirm = raw_input("retumx> restore "+tmux.tid+"? [yes|no] ")
         if confirm.lower() == "yes":
             do_restore(tmux.tid)
             LOG.info('Backup %s was restored' %tmux.tid)
