@@ -6,7 +6,7 @@
 	 / /  /  __/ /_/ / / / / / /_/ />  <  
 	/_/   \___/\__/_/ /_/ /_/\__,_/_/|_|
 
-				- a tmux backup/reload tool
+				- A tmux backup/reload tool
 
 ##Introduction
 Tmux is very handy tool. However we cannot persist the sessions and reload them later. We want to restore our sessions in some situations. E.g. when we have to reboot the machine or we want to "clone" all sessions from a machine to another.
@@ -25,7 +25,7 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 - most important: tmux sessions backup and restore :) 
 
 ###What can be backuped/restored?
-- **sessions** : with names, size
+- **sessions** : with names, terminal-size
 - **windows** : with name, order, pane split and split layout
 - **panes**  : with path and content with same look and feel (ANSI escapes)
 
@@ -37,8 +37,16 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 
 
 
-##Example & Screenshots
+##Example & Screenshots & Demo
+
 tbd
+
+- `retmux -h` output
+
+- show detail of a tmux backup
+
+- restore pane content with ANSI Escape
+
 
  
 
@@ -48,28 +56,6 @@ tbd
 
 ##Usage
 
-    [USAGE] 
-        retmux [OPTIONS] 
-    [OPTIONS] 
-        -h print help message
+see the first screenshot in the `screenshots` section
 
-        -v version
-
-        -l [name] : list backup info
-               with [name]: show detailed backup info by name
-            without [name]: show brief and detailed info interactively
-
-        -d [name] : delete a backup
-               with [name]: delete by given name
-            without [name]: delete interactively
-
-        -b [name] : backup current tmux sessions
-               with [name]: name the backup with given name
-            without [name]: name the backup with default name(timestamp)
-
-        -r [name] : restore tmux sessions from backup
-               with [name]: restore sessions by backup name
-            without [name]: restore from the latest backup
-
-        -ri       : restore sessions interactively
 
