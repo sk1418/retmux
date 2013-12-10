@@ -25,7 +25,7 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 - most important: tmux sessions backup and restore :) 
 
 ###What can be backuped/restored?
-- **sessions** : with names
+- **sessions** : with names, size
 - **windows** : with name, order, pane split and split layout
 - **panes**  : with path and content with same look and feel (ANSI escapes)
 

@@ -34,6 +34,7 @@ CMD_SET_LAYOUT       = 'tmux select-layout -t%s:%d %s'
 CMD_LOAD_CONTENT     = 'tmux send-keys -t%s cat %s\n'
 
 def has_tmux_server():
+    """check if there is a running tmux server"""
     cmd  = CMD_LIST_SESSIONS.split(' ')
     code = util.cmd_return_code(cmd)
     return code == 0
@@ -61,7 +62,6 @@ def get_panes_from_sess_win(sess_name,win_idx):
     """return list of result string
       output format: paneIdx:=:(width,height):=:path:=:active
     """
-    #dict parameter
     p = (sess_name,win_idx)
     cmd = (CMD_LIST_PANES % p).split(' ')
     s = util.exec_cmd(cmd)
@@ -142,10 +142,6 @@ def kill_session(sess_name):
     return util.cmd_return_code(cmd) == 0
 
 def restore_pane_content(pane_idstr,filename):
-    """restore backuped pane content. This is done in two
-    steps, 
-    1: load buffer from file
-    2: paste buffer
-    """
+    """restore backuped pane content.  """
     cmd = (CMD_LOAD_CONTENT %  (pane_idstr,filename)).split(' ',3)
     util.exec_cmd(cmd)

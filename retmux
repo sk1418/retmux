@@ -9,7 +9,7 @@ import logging
 import tmuxbk.log as log
 
 """
-the start point of tmuxback. 
+the start script of retmux
 """
 
 help_info = """ %(cyan)s
@@ -53,7 +53,7 @@ def usage():
 
 def version():
     """print version"""
-    print config.VERSION
+    print 'retmux ' + config.VERSION
 
 actions = {
     '-l'  : controller.show_and_action,

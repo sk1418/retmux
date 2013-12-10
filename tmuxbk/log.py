@@ -7,18 +7,18 @@ LVL_DICT={
         'debug' : logging.DEBUG,
         'info'  : logging.INFO,
         'error' : logging.ERROR,
-        'warn' : logging.WARNING
+        'warn'  : logging.WARNING
         }
 
 #style dict
 STYLE={
-'bold'  : '\033[1m',
-'clear' : '\033[0m',
-'uline' : '\033[4m', # Underline Texth
-'error' : '\033[31;5m', #blink, bold, red
-'red'   : '\033[31;1m', # bold, red
-'warning' : '\033[33;1m', #blink, bold, yellow
-'cyan'  : '\033[36;1m', #bold, cyan
+    'bold'    : '\033[1m',
+    'clear'   : '\033[0m',
+    'uline'   : '\033[4m', # Underline Texth
+    'error'   : '\033[31;5m', #blink, bold, red
+    'red'     : '\033[31;1m', # bold, red
+    'warning' : '\033[33;1m', #blink, bold, yellow
+    'cyan'    : '\033[36;1m', #bold, cyan
 }
 
 def hl(text,style_key):
@@ -33,7 +33,7 @@ def print_err(msg):
     print hl('Error: ','error') + msg
 
 def print_warn(msg):
-    """this is for normal error output before the logger was setup"""
+    """this is for normal warning output before the logger was setup"""
     print hl('Warning: ','warning') + msg
 
 class TmuxbackFormatter(logging.Formatter):

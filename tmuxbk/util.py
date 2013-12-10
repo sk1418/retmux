@@ -10,7 +10,7 @@ import random, string
 
 
 def object2dict(obj):
-    #convert object to a dict
+    """convert object to a dict"""
     d = {}
     d['__class__'] = obj.__class__.__name__
     d['__module__'] = obj.__module__
