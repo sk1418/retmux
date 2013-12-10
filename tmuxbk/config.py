@@ -16,8 +16,8 @@ CONF_FILE   = path.join(USER_PATH, "retmux.conf")
 
 ######user config####
 WITH_CNT = None
-LOG_LVL_FILE = ''
-LOG_LVL_CONSOLE = ''
+LOG_LVL_FILE = 'INFO'
+LOG_LVL_CONSOLE = 'INFO'
 
 
 def load_config():
@@ -35,16 +35,19 @@ def load_config():
     cf.read(CONF_FILE);
 
     #load options here
-    LOG_LVL_FILE = cf.get('settings','log.level.file')
-    LOG_LVL_CONSOLE = cf.get('settings','log.level.console')
+    
+    lvl_file = cf.get('settings','log.level.file')
+    lvl_console = cf.get('settings','log.level.console')
 
-    if LOG_LVL_FILE.lower() not in log.LVL_DICT.keys():
-        print "cannot load log.level.file config, use default INFO"
-        LOG_LVL_FILE = 'INFO'
+    if lvl_file.lower() not in log.LVL_DICT.keys():
+        print "cannot load log.level.file config, use default: %s" % LOG_LVL_FILE
+    else:
+        LOG_LVL_FILE = lvl_file
 
-    if LOG_LVL_CONSOLE.lower() not in log.LVL_DICT.keys():
-        print "cannot load log.level.console config, use default INFO"
-        LOG_LVL_CONSOLE = 'INFO'
+    if lvl_console.lower() not in log.LVL_DICT.keys():
+        print "cannot load log.level.console config, use default: %s" %LOG_LVL_CONSOLE
+    else:
+        LOG_LVL_CONSOLE = lvl_console
 
 
     return True;

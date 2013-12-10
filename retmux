@@ -13,13 +13,13 @@ the start point of tmuxback.
 """
 
 help_info = """
-    tmuxback (get my tmux back) is tool to backup and restore tmux sessions.
-    Usage tmuxback [options]
+    retmux is tool to backup and restore tmux sessions.
+    Usage retmux [options]
     
     [OPTIONS] 
-        -h print help message
+        %(bold)s-h%(clear)s print help message
 
-        -v version
+        %(bold)s-v%(clear)s version
 
         -l [name] : list backup info
                with [name]: show detailed backup info by name
@@ -40,11 +40,14 @@ help_info = """
         -ri       : restore sessions interactively
 
     """
-
+STYLE={
+'bold':'\033[1m',
+'clear':'\033[0m'
+}
 
 def usage():
     """print usage information"""
-    print help_info
+    print help_info % STYLE
 
 def version():
     """print version"""
