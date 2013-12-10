@@ -8,10 +8,35 @@ LVL_DICT={
         'info'  : logging.INFO,
         'error' : logging.ERROR
         }
+
+#style dict
+STYLE={
+'bold'  : '\033[1m',
+'clear' : '\033[0m',
+'uline' : '\033[4m', # Underline Texth
+'error' : '\033[31;5m', #blink, bold, red
+'warning' : '\033[33;1m', #blink, bold, yellow
+}
+
+def hl(text,style_key):
+    """highlight the give text"""
+    k = style_key.lower()
+    if k not in STYLE.keys():
+        return text
+    return ('%('+k+')s'+ text + '%(clear)s') % STYLE
+
+def print_err(msg):
+    """this is for normal error output before the logger was setup"""
+    print hl('Error: ','error') + msg
+
+def print_warn(msg):
+    """this is for normal error output before the logger was setup"""
+    print hl('Warning: ','warning') + msg
+
 class TmuxbackFormatter(logging.Formatter):
     """define different format for different log levels"""
 
-    err_fmt  = "ERROR: %(msg)s"
+    err_fmt  = hl('ERROR: ','error') +"%(msg)s"
     dbg_fmt  = "DEBUG: %(module)s: %(lineno)d: %(msg)s"
     info_fmt = "%(msg)s"
 

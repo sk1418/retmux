@@ -42,19 +42,18 @@ def load_config():
         CNT_WITH_ESC = cf.getboolean('settings','content.with.escape')
 
         if lvl_file.lower() not in log.LVL_DICT.keys():
-            print "cannot load log.level.file config, use default: %s" % LOG_LVL_FILE
+            log.print_warn("cannot load log.level.file config, use default: %s" % LOG_LVL_FILE)
         else:
             LOG_LVL_FILE = lvl_file
 
         if lvl_console.lower() not in log.LVL_DICT.keys():
-            print "cannot load log.level.console config, use default: %s" %LOG_LVL_CONSOLE
+            log.print_warn("cannot load log.level.console config, use default: %s" %LOG_LVL_CONSOLE)
         else:
             LOG_LVL_CONSOLE = lvl_console
     except:
-        print "Warning: Error occured when loading config, using all default values"
+
+        log.print_warn('Error occured when loading config, using all default values')
         return False
-
-
     return True;
 
 def init_config():

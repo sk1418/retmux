@@ -38,16 +38,10 @@ help_info = """retmux is tool to backup and restore tmux sessions.
 
         %(bold)s-ri%(clear)s       : restore sessions interactively"""
 
-#style dict
-STYLE={
-'bold':'\033[1m',
-'clear':'\033[0m',
-'uline':"\033[4m" # Underline Texth
-}
 
 def usage():
     """print usage information"""
-    print help_info % STYLE
+    print help_info % log.STYLE
 
 def version():
     """print version"""

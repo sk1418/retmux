@@ -20,7 +20,7 @@ def list_all_sessions():
         #name is empty, show all list(short info)
         l = util.all_backups()
         if not l or len(l) == 0:
-            print  "No backup was created yet.\nretmux -b [name] to create backup" 
+            log.info("No backup was created yet.\nretmux -b [name] to create backup" )
             sys.exit()
 
         last = util.latest_backup().split('/')[-1]
@@ -64,18 +64,18 @@ def show_and_action(name=None, action=None):
         #interactively show details
         while 1:
             list_all_sessions()
-            idx = raw_input("tmuxback> Please give backup No. (press q to exit):")
+            idx = raw_input("retmux> Please give backup No. (press q to exit):")
 
             if not idx:
-                print "tmuxback> ERR: Invalid index: (empty)"
+                log.print_err("Invalid index: (empty)")
             elif idx.lower() == 'q':
                 break
             elif not tmux_dict.has_key(idx):
-                print "tmuxback> ERR: Invalid index: " + idx
+               log.print_err("Invalid index: " + idx)
             else:
                 tmux = tmux_dict[idx]
                 print util.get_line('>')
-                print '\nDetails of backup:%s'% tmux.tid
+                print log.hl('Details of backup:','bold') +'%s'% tmux.tid
                 print util.get_line('>')
                 print '\n'.join(tmux.long_info())
                 print util.get_line('<')
@@ -83,7 +83,7 @@ def show_and_action(name=None, action=None):
                     action(tmux)
     else:
         #till here, the name should be validated, exists
-        print '\nDetails of backup:%s'% name
+        print log.hl('Details of backup:','bold') +'%s'% name
         print util.get_line('=')
         tmux = util.get_tmux_by_id(name)
         print '\n'.join(tmux.long_info()) 

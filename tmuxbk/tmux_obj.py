@@ -1,5 +1,8 @@
 # -*- coding:utf-8 -*-
 from operator import attrgetter
+import log
+
+LOG = log.get_logger()
 
 class Tmux(object):
     short_format = '%-17s %-30s %s'
@@ -23,20 +26,20 @@ class Tmux(object):
         backup_fmt = u' Backup─┬─[%s] (%d sessions):'
         sess_fmt   = u'─Session─┬─[%s] (%d windows):'
         win_fmt    = u'─Window─┬─(%d) [%s] (%d panes):'
-        pane_fmt   = u'─Pane (%d) %s'
+        pane_fmt   = u'─' + log.hl('Pane','bold') +' (%d) %s'
         info.append("%72s" % ('Backup was created on ' + self.create_time))
 
-        info.append(backup_fmt %(self.tid, len(self.sessions)))
+        info.append(backup_fmt %(log.hl(self.tid,'bold'), len(self.sessions)))
         
         last_s = self.sessions[-1]
         for s in self.sessions:
             is_last_s = s.name == last_s.name
-            s_info = sess_fmt % ( s.name, len(s.windows))
+            s_info = sess_fmt % ( log.hl(s.name,'bold'), len(s.windows))
             info.append( tree_struc(s_info, [is_last_s],lvl=1))
             last_w = s.windows[-1]
             for w in s.windows:
                 is_last_w = w.win_id == last_w.win_id
-                w_info = win_fmt % (w.win_id, w.name, len(w.panes))
+                w_info = win_fmt % (w.win_id, log.hl(w.name,'bold'), len(w.panes))
                 info.append(tree_struc(w_info, [is_last_s,is_last_w],lvl=2))
                 last_p = w.panes[-1]
                 for p in w.panes:
