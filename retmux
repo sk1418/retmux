@@ -12,37 +12,37 @@ import tmuxbk.log as log
 the start point of tmuxback. 
 """
 
-help_info = """
-    retmux is tool to backup and restore tmux sessions.
-    Usage retmux [options]
-    
-    [OPTIONS] 
+help_info = """retmux is tool to backup and restore tmux sessions.
+    [%(uline)sUSAGE%(clear)s] 
+        retmux [OPTIONS] 
+    [%(uline)sOPTIONS%(clear)s] 
         %(bold)s-h%(clear)s print help message
 
         %(bold)s-v%(clear)s version
 
-        -l [name] : list backup info
+        %(bold)s-l%(clear)s [name] : list backup info
                with [name]: show detailed backup info by name
             without [name]: show brief and detailed info interactively
 
-        -d [name] : delete a backup
+        %(bold)s-d%(clear)s [name] : delete a backup
                with [name]: delete by given name
             without [name]: delete interactively
 
-        -b [name] : backup current tmux sessions
+        %(bold)s-b%(clear)s [name] : backup current tmux sessions
                with [name]: name the backup with given name
             without [name]: name the backup with default name(timestamp)
 
-        -r [name] : restore tmux sessions from backup
+        %(bold)s-r%(clear)s [name] : restore tmux sessions from backup
                with [name]: restore sessions by backup name
             without [name]: restore from the latest backup
 
-        -ri       : restore sessions interactively
+        %(bold)s-ri%(clear)s       : restore sessions interactively"""
 
-    """
+#style dict
 STYLE={
 'bold':'\033[1m',
-'clear':'\033[0m'
+'clear':'\033[0m',
+'uline':"\033[4m" # Underline Texth
 }
 
 def usage():
