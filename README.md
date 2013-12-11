@@ -31,8 +31,10 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 
 ###What would NOT be backuped/restored?
 - the processes/programs running in window or pane at backup time
+- the logined user, if the user is not same as the user who started tmux.(e.g. after `su`)
 - command history in each window
 - buffer stacks (could be done, but didn't see the need)
+
 
 
 
