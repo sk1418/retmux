@@ -8,9 +8,10 @@ import log
 VERSION     = '1.0.0'                #software version
 #the separator of tmux command output
 SEP         = ':=:'
-APP_PATH    = path.join(path.dirname(__file__),"../")
+PKG_PATH    = path.dirname(__file__)
+APP_PATH    = path.join(PKG_PATH,"../")
 USER_PATH   = path.join(os.getenv("HOME") , ".retmux")
-SAMPLE_CONF = path.join(APP_PATH, 'conf','default.conf')
+SAMPLE_CONF = path.join(PKG_PATH, 'conf','default.conf')
 BACKUP_PATH = path.join(USER_PATH, "backup")
 CONF_FILE   = path.join(USER_PATH, "retmux.conf")
 
