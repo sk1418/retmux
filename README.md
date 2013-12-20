@@ -35,26 +35,20 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 - command history in each window
 - buffer stacks (could be done, but didn't see the need)
 
-
-
-
-
 ##Example & Screenshots & Demo
 
-tbd
-
 - `retmux -h` output
+![help view](https://raw.github.com/sk1418/sharedResources/master/retmux/retmux_help.png)
 
 - show detail of a tmux backup
-
-- restore pane content with ANSI Escape
-
-
- 
+![detail view](https://raw.github.com/sk1418/sharedResources/master/retmux/retmux_details.png)
 
 ##Installation
 
-- tbd
+- for Archlinux user, `retmux` is available in AUR.
+- for other users:
+
+	sudo python setup.py install
 
 ##Usage
 
