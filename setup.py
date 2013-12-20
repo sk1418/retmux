@@ -6,7 +6,7 @@ setup(
     install_requires=[ 'pycrypto>=2.6' ],
     packages = find_packages(),
     package_data={'retmux':['conf/*.*']},
-    data_files=[('conf',glob.glob('conf/*.*'))],
+    #data_files=[('conf',glob.glob('conf/*.*'))],
     include_package_data= True,
     zip_safe=False,
     scripts=['retmux'],
