@@ -5,7 +5,7 @@ setup(
     version = '1.0.0',
     install_requires=[ 'pycrypto>=2.6' ],
     packages = find_packages(),
-    package_data={'retmux':['conf/*.conf']},
+    package_data={'tmuxbk':['conf/*.conf']},
     #data_files=[('conf',glob.glob('conf/*.*'))],
     include_package_data= True,
     zip_safe=False,
