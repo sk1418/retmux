@@ -44,7 +44,8 @@ help_info = """ %(cyan)s
                with [name]: restore sessions by backup name
             without [name]: restore from the latest backup
 
-        %(bold)s-ri%(clear)s       : restore sessions interactively"""
+        %(bold)s-ri%(clear)s       : restore sessions interactively
+        config file: $HOME/.retmux/retmux.conf"""
 
 
 def usage():
