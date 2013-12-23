@@ -27,7 +27,7 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 ###What can be backuped/restored?
 - **sessions** : with names, terminal-size
 - **windows** : with name, order, pane split and split layout
-- **panes**  : with path and content with same look and feel (ANSI escapes)
+- **panes**  : with path and content(up to 100000 line history content) with same look and feel (ANSI escapes)
 
 ###What would NOT be backuped/restored?
 - the processes/programs running in window or pane at backup time
