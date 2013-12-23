@@ -19,10 +19,12 @@ CMD_CREATE_SESSION   = 'tmux new-session -d -s%s -x%d -y%d'
 CMD_KILL_SESSION     = 'tmux kill-session -t%s'
 
 #capture pane content and save in given file. the first %s is paneIdstr, 2nd %s is filename
-CMD_CAPTURE_PANE     = 'tmux capture-pane -%sp -t%s'
+CMD_CAPTURE_PANE     = 'tmux capture-pane -%sp -S-100000 -t%s'
 CMD_SHOW_OPTION      = 'tmux show-options -gv %s'
 CMD_HAS_SESSION      = 'tmux has-session -t%s'
-CMD_SET_PANE_PATH    = 'tmux send-keys -t%s cd \"%s\"\nclear\n'
+CMD_SET_PANE_PATH    = 'tmux send-keys -t%s cd \"%s\"\n'
+#CMD_SET_PANE_PATH    = 'tmux send-keys -t%s cd \"%s\"\nclear\n'
+CMD_CLEAR_PANE       = 'tmux clear-history -t%s'
 
 CMD_LIST_WINDOWS     = 'tmux list-windows -F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout} -t%s'
 CMD_MOVE_WINDOW      = 'tmux move-window -s%s -t%s'
@@ -70,6 +72,9 @@ def get_panes_from_sess_win(sess_name,win_idx):
 def set_pane_path(pane_idstr, path):
     """ set pane path by 'send-key' and clear the screen"""
     cmd = (CMD_SET_PANE_PATH % (pane_idstr,path)).split(' ',3)
+    util.exec_cmd(cmd)
+    #clear history
+    cmd = (CMD_CLEAR_PANE%(pane_idstr)).split(' ')
     util.exec_cmd(cmd)
 
 
