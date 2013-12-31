@@ -6,6 +6,8 @@ import log
 
 
 VERSION     = '1.0.0'                #software version
+#shell command separator
+CMD_SEP     = u'\x97'
 #the separator of tmux command output
 SEP         = ':=:'
 PKG_PATH    = path.dirname(__file__)
