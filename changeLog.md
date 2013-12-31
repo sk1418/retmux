@@ -1,7 +1,7 @@
 # retmux change log
 
-## version 1.0.1       2013-12-31
+## 2013-12-31 VERSION 1.0.1
 - bugfix: session/window names with spaces
 
-## version 1.0.0       2013-12-xx
+## 2013-12-23 VERSION 1.0.0       
 - first release
