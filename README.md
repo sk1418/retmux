@@ -55,3 +55,5 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 see the first screenshot in the `screenshots` section
 
 
+% vim: nofoldenable
+

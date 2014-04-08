@@ -3,7 +3,7 @@ import glob
 setup(
     name = 'retmux',
     version = '1.0.0',
-    install_requires=[ 'pycrypto>=2.6' ],
+    install_requires=[ ],
     packages = find_packages(),
     package_data={'tmuxbk':['conf/*.conf']},
     #data_files=[('conf',glob.glob('conf/*.*'))],
