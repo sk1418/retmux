@@ -6,7 +6,7 @@
 	 / /  /  __/ /_/ / / / / / /_/ />  <  
 	/_/   \___/\__/_/ /_/ /_/\__,_/_/|_|
 
-				- A tmux backup/reload tool
+		- A tmux session backup/reload tool
 
 ##Introduction
 Tmux is very handy tool. However we cannot persist the sessions and reload them later. We want to restore our sessions in some situations. E.g. when we have to reboot the machine or we want to "clone" all sessions from a machine to another.
@@ -20,7 +20,7 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 ##Features
 
 - configurable options for (logging, ANSI escapes)
-- (non- or) interactive operations (list/delete/restore) backups
+- (non- or) interactive operations (list/delete/restore/backup)
 - highlighted output
 - most important: tmux sessions backup and restore :) 
 
