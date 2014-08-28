@@ -104,7 +104,7 @@ def action_delete(tmux):
             if util.delete_backup(tmux.tid) == 0:
                 global tmux_dict
                 tmux_dict={} #empty the dict
-                LOG.info('Backup %s was deleted',tmux.tid)
+                LOG.info('Backup %s was deleted'%tmux.tid)
         
 def do_backup(name=None):
     """backup current tmux sessions with given name
