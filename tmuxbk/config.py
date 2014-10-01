@@ -5,7 +5,7 @@ import ConfigParser
 import log
 
 
-VERSION     = '1.0.1'                #software version
+VERSION     = '1.0.1_bleeding'                #software version
 #shell command separator
 CMD_SEP     = u'\x97'
 #the separator of tmux command output
