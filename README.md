@@ -45,10 +45,11 @@ Tmux is very handy tool. However we cannot persist the sessions and reload them 
 
 ##Installation
 
-- for Archlinux user, `retmux` is available in AUR.
+- for Archlinux user, `retmux` is available in AUR. If you want to try the development version, install the `retmux-git` package.
 - for other users:
+	- checkout the `master` branch for stable release version, checkout `bleeding` branch for development version, then
 
-	sudo python setup.py install
+		sudo python setup.py install
 
 ##Usage
 
