@@ -18,7 +18,11 @@ STYLE={
     'error'   : '\033[31;5m', #blink, bold, red
     'red'     : '\033[31;1m', # bold, red
     'warning' : '\033[33;1m', #blink, bold, yellow
-    'cyan'    : '\033[36;1m', #bold, cyan
+    #'cyan'    : '\033[36;1m', #bold, cyan
+    'cyan'    : u'\x1b[36m',
+    'green'   : u'\x1b[32m',
+    'blue'    : u'\x1b[34m', 
+    'purple'  : u'\x1b[35m',
 }
 
 def hl(text,style_key):
