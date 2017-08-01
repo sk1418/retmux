@@ -21,9 +21,10 @@ help_info = """ %(cyan)s
 
             - A tmux backup/reload tool %(clear)s
 
-    [%(uline)sUSAGE%(clear)s] 
+    [%(bold)sUSAGE%(clear)s] 
         retmux [OPTIONS] 
-    [%(uline)sOPTIONS%(clear)s] 
+
+    [%(bold)sOPTIONS%(clear)s] 
         %(bold)s-h%(clear)s print help message
 
         %(bold)s-v%(clear)s version
@@ -45,9 +46,12 @@ help_info = """ %(cyan)s
             without [name]: restore from the latest backup
 
         %(bold)s-ri%(clear)s       : restore sessions interactively
-        config file: $HOME/.retmux/retmux.conf"""
+        config file: $HOME/.retmux/retmux.conf
 
-
+    [%(bold)sAUTHOR%(clear)s] 
+        Kai Yuan <kent.yuan(at)gmail.com> 
+        Please report bugs at https://github.com/sk1418/retmux/issues
+    """
 def usage():
     """print usage information"""
     print help_info % log.STYLE

@@ -38,7 +38,7 @@ def list_all_sessions():
     list_fmt = '%s%2s %s'#fmt for list all, the first %s is the '*' place
     print util.get_line('=')
     #header
-    print  list_fmt %(' ', 'No.',tmux_obj.Tmux.short_format%('Name','Sessions','Create on'))
+    print  list_fmt %(' ', 'No.',tmux_obj.Tmux.short_format%('Name','Sessions','Created on'))
     print util.get_line('=')
     keys = tmux_dict.keys()
     keys.sort()
