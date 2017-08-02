@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     #load config
     if not config.load_config():
-        print
+        print "loading config failed"
     
     log.setup_log(config.LOG_LVL_CONSOLE, config.LOG_LVL_FILE)
 

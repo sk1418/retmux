@@ -67,12 +67,16 @@ def get_panes_from_sess_win(sess_name,win_idx):
 
 def set_pane_path(pane_idstr, path):
     """ set pane path by 'send-key' and clear the screen"""
-    cmd = (CMD_SET_PANE_PATH % (pane_idstr,path)).split(config.CMD_SEP)
-    util.exec_cmd(cmd)
     #clear history
-    cmd = (CMD_CLEAR_PANE%(pane_idstr)).split(config.CMD_SEP)
-    util.exec_cmd(cmd)
+    cmdline = (CMD_CLEAR_PANE%(pane_idstr)).split(config.CMD_SEP)
+    util.exec_cmd(cmdline)
 
+    cmdline = (CMD_SET_PANE_PATH % (pane_idstr,path)).split(config.CMD_SEP)
+    util.exec_cmd(cmdline)
+
+    #clear history
+    cmdline = (CMD_CLEAR_PANE%(pane_idstr)).split(config.CMD_SEP)
+    util.exec_cmd(cmdline)
 
 def capture_pane(pane_idstr,filename):
     """

@@ -82,7 +82,7 @@ def setup_log(c_lvl_str, f_lvl_str):
     console_lvl = LVL_DICT[c_lvl_str.lower()]
 
     logger = logging.getLogger('retmuxLogger')
-    logger.setLevel(file_lvl)
+    logger.setLevel(logging.DEBUG)
 
     # create file handler which logs even debug messages
     fh = logging.handlers.RotatingFileHandler( \
