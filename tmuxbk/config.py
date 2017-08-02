@@ -5,7 +5,7 @@ import ConfigParser
 import log
 
 
-VERSION     = 'git-version'                #software version
+VERSION     = '1.0.2'                #software version
 #shell command separator
 CMD_SEP     = u'\x97'
 #the separator of tmux command output
