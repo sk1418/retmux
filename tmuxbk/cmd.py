@@ -20,7 +20,7 @@ CMD_KILL_SESSION     = config.CMD_SEP.join(['tmux','kill-session', '-t%s'])
 CMD_CAPTURE_PANE     = config.CMD_SEP.join(['tmux','capture-pane','-%sp', '-S-100000', '-t%s'])
 CMD_SHOW_OPTION      = config.CMD_SEP.join(['tmux','show-options','-gv','%s'])
 CMD_HAS_SESSION      = config.CMD_SEP.join(['tmux','has-session','-t%s'])
-CMD_SET_PANE_PATH    = config.CMD_SEP.join(['tmux','send-keys','-t%s','cd \"%s\"\nclear\n'])
+CMD_SET_PANE_PATH    = config.CMD_SEP.join(['tmux','send-keys','-t%s','cd \"%s\"', 'Enter', 'clear', 'Enter'])
 CMD_CLEAR_PANE       = config.CMD_SEP.join(['tmux','clear-history', '-t%s'])
 CMD_LIST_WINDOWS     = config.CMD_SEP.join(['tmux','list-windows','-F#{window_index}:=:#{window_name}:=:#{window_active}:=:#{window_layout}','-t%s'])
 CMD_MOVE_WINDOW      = config.CMD_SEP.join(['tmux','move-window','-s%s','-t%s'])
@@ -29,7 +29,7 @@ CMD_NEW_EMPTY_WINDOW = config.CMD_SEP.join(['tmux','new-window','-d','-t%s:%d'])
 CMD_ACTIVE_WINDOW    = config.CMD_SEP.join(['tmux','select-window','-t%s:%d'])
 CMD_SPLIT_WINDOW     = config.CMD_SEP.join(['tmux','split-window','-d','-l3','-t%s:%d.%d'])
 CMD_SET_LAYOUT       = config.CMD_SEP.join(['tmux','select-layout','-t%s:%d','%s'])
-CMD_LOAD_CONTENT     = config.CMD_SEP.join(['tmux','send-keys','-t%s','cat   %s\n'])
+CMD_LOAD_CONTENT     = config.CMD_SEP.join(['tmux','send-keys','-t%s','cat   %s', 'Enter'])
 
 def has_tmux_server():
     """check if there is a running tmux server"""
