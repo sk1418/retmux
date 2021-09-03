@@ -65,7 +65,7 @@ skip restoring the session:%s.' % sess.name)
 def restore_session(sess, tmux_id):
     """create the session from session object"""
     LOG.debug('create session, with initial win: %s' % sess.name)
-    cmd.create_session(sess.name,sess.size)
+    cmd.create_session(sess.name)
     for win in sess.windows_in_reverse()[:-1]:
         #rename, renumber window
         restore_window(win, tmux_id)

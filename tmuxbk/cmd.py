@@ -11,10 +11,10 @@ LOG = log.get_logger()
 
 ##list sessions
 
-CMD_LIST_SESSIONS    = config.CMD_SEP.join(['tmux', 'list-sessions', '-F#S:=:(#{session_width},#{session_height}):=:#{session_attached}'])
+CMD_LIST_SESSIONS    = config.CMD_SEP.join(['tmux', 'list-sessions', '-F#S:=:#{session_attached}'])
 #tmux list-panes -t {session}:{windowIdx}
 CMD_LIST_PANES       = config.CMD_SEP.join(['tmux','list-panes','-t%s:%s', '-F#{pane_index}:=:(#{pane_width},#{pane_height}):=:#{pane_current_path}:=:#{pane_active}'])
-CMD_CREATE_SESSION   = config.CMD_SEP.join(['tmux','new-session', '-d','-s%s','-x%d','-y%d'])
+CMD_CREATE_SESSION   = config.CMD_SEP.join(['tmux','new-session', '-d','-s%s'])
 CMD_KILL_SESSION     = config.CMD_SEP.join(['tmux','kill-session', '-t%s'])
 #capture pane content and save in given file. The first %s is the ANSI-ESC flag (-e); the second %s is paneIdstr
 CMD_CAPTURE_PANE     = config.CMD_SEP.join(['tmux','capture-pane','-%sp', '-S-100000', '-t%s'])
@@ -88,8 +88,8 @@ def capture_pane(pane_idstr,filename):
     cmd = (CMD_CAPTURE_PANE % p).split(config.CMD_SEP)
     util.exec_cmd_redir(cmd, filename)
 
-def create_session(sess_name,size):
-    p = (sess_name,size[0],size[1])
+def create_session(sess_name):
+    p = (sess_name)
     cmd = (CMD_CREATE_SESSION % p).split(config.CMD_SEP)
     s = util.exec_cmd(cmd)
 
